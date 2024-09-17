@@ -52,7 +52,7 @@ yarn-error.*
 expo-env.d.ts
 # @end expo-cli
 
-google-services.json
+# google-services.json
 
 paybills-flynexus-firebase-adminsdk-iw6ru-7935f75045.json
 
