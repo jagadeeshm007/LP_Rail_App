@@ -259,6 +259,7 @@ export default function DataProvider({ children }: PropsWithChildren<{}>) {
         unsubscribe = Firestore()
           .collection("transactions")
           .where("projectId", "==", userProfile.projectId)
+          .where("status", "in", ["Accepted", "Denied", "Processing"])
           .orderBy("timestamp", "desc")
           .onSnapshot(
             (snapshot) => {
