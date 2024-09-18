@@ -19,7 +19,7 @@ import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
-import { TransactionData } from "@/assets/Types";
+import { BankData, developmentData, TransactionData } from "@/assets/Types";
 import { TextInput } from "react-native-paper";
 import PaymentSlip from "@/src/components/PaymentSlip";
 import ShareButton from "@/src/components/ShareButton";
@@ -55,7 +55,11 @@ const Transaction: React.FC = () => {
   const [itemName, setItemName] = useState<string>("");
   const [openItem, setOpenItem] = useState<boolean>(false);
   const [isOtherSelected, setIsOtherSelected] = useState<boolean>(false);
+  const [type, settype] = useState<string>("Site Expenditure");
+  const [bankdata, setbankdata] = useState<BankData | null>(null);
+  const [developmentdata, setdevelopmentdata] = useState<developmentData | null>(null);
   const { userProfile,fetchDocument } = useData();
+  
 
   const [StatementOptions, setStatementOptions] = useState<any[]>([
     { label: "Other (Enter manually)", value: "Other (Enter manually)" },
@@ -90,12 +94,37 @@ const Transaction: React.FC = () => {
     if (isMenuVisible) setMenuVisible(false);
   };
 
-  useEffect(() => {
+  useEffect( ()  => {
     if (id) {
       try {
         const parsedData = JSON.parse(decodeURIComponent(id.toString()));
         setTransactionData(parsedData);
         setStatus(parsedData.status);
+        if(parsedData.BankId || parsedData.development) {
+          if(parsedData.BankId){
+            settype("Material and PO Payment");
+            try{
+            const data = fetchDocument("BankDetails", parsedData.BankId);
+            data.then((doc) => {
+              setbankdata(doc);
+            });
+            console.log("Bank Data", bankdata);
+          } catch (error) {
+            console.error("Error parsing data of bank:", error);
+          }
+          }
+          else{
+            settype("General");
+            try{
+            const data = fetchDocument("developmentData", parsedData.development);
+            data.then((doc) => {
+              setdevelopmentdata(doc);
+            });
+          } catch (error) {
+            console.error("Error parsing data of development:", error);
+          }
+          }
+        }
         setPreloading(false);
       } catch (error) {
         console.error("Error parsing data:", error);
@@ -370,6 +399,11 @@ const Transaction: React.FC = () => {
   // console.log("Transaction Data", transactionData.details);
   const receipts = transactionData?.Recipts ?? [];
 
+  const convertToText = (data: BankData) => {
+    return `Vendor Name: ${data.vendorname}\nAccount Number: ${data.accountNumber}\nIFSC Code: ${data.ifsc}\nPO Number: ${data.ponumber}`;
+  }
+
+
   return (
     <TouchableWithoutFeedback style={{ flex: 1 }} onPress={closeMenu}>
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -386,6 +420,14 @@ const Transaction: React.FC = () => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           >
+            {/* // title of the transaction */}
+            {
+              <View style={{margin:10}}>
+                <Text style={{color:'white', fontSize:20,fontWeight:'bold'}}>
+                  {type}
+                </Text>
+              </View>
+            }
             <PaymentSlip
               transactionData={transactionData}
               status={status}
@@ -440,7 +482,7 @@ const Transaction: React.FC = () => {
                   >
                     Details:
                   </Text>
-                  <CopyClipBoard text={transactionData.id} />
+                  <CopyClipBoard text={transactionData.details} />
                 </View>
 
                 <Text style={{ color: "#E0E0E0", fontSize: 18 }}>
@@ -449,11 +491,101 @@ const Transaction: React.FC = () => {
               </View>
               )
             }
+            {/* //-------------------------------------------------------------------------------------> // */}
+            {
+              (bankdata ) && (
+                <View
+                style={{
+                  flex: 1,
+                  marginVertical: 10,
+                  backgroundColor: "#888",
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#E0E0E0",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Bank Details:
+                  </Text>
+                  <CopyClipBoard text={convertToText(bankdata)} />
+                </View>
+
+                <Text style={{ color: "#E0E0E0", fontSize: 18 }} >
+                  <Text style={{ color: "#E0E0E0", fontSize: 18, fontWeight: "bold" }}>
+                    Vendor Name:
+                  </Text>
+                  {bankdata?.vendorname}
+                </Text>
+                <Text style={{ color: "#E0E0E0", fontSize: 18 }}>
+                <Text style={{ color: "#E0E0E0", fontSize: 18, fontWeight: "bold" }}>
+                    Account Number:
+                  </Text>
+                  {bankdata?.accountNumber}
+                </Text>
+                <Text style={{ color: "#E0E0E0", fontSize: 18 }}>
+                <Text style={{ color: "#E0E0E0", fontSize: 18, fontWeight: "bold" }}>
+                    IFSC Code:
+                  </Text>
+                  {bankdata?.ifsc}
+                </Text>
+                <Text style={{ color: "#E0E0E0", fontSize: 18 }}>
+                <Text style={{ color: "#E0E0E0", fontSize: 18, fontWeight: "bold" }}>
+                    PO Number:
+                  </Text>
+                  {bankdata?.ponumber}
+                </Text>
+              </View>
+              )
+            }
+            {
+              (developmentdata  ) && (
+                <View
+                style={{
+                  flex: 1,
+                  marginVertical: 10,
+                  backgroundColor: "#888",
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#E0E0E0",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Payed for:<Text style={{color:'#fff',fontWeight:'500',fontSize:18}}>{developmentdata?.payfor}</Text>
+                  </Text>
+                  <CopyClipBoard text={developmentdata.payfor} />
+                </View>
+              </View>
+              )
+            }
             <ScrollView
               style={{
                 flex: 1,
                 backgroundColor: "#444",
-                margin: 10,
+                margin: 1,
                 borderRadius: 20,
                 maxHeight: 350,
               }}
@@ -502,7 +634,7 @@ const Transaction: React.FC = () => {
               style={{
                 flex: 1,
                 backgroundColor: "#444",
-                margin: 10,
+                margin: 1,
                 borderRadius: 20,
                 maxHeight: 350,
               }}>
@@ -555,7 +687,7 @@ const Transaction: React.FC = () => {
               style={{
                 flex: 1,
                 backgroundColor: "#444",
-                margin: 10,
+                margin: 1,
                 borderRadius: 20,
                 maxHeight: 350,
               }}>

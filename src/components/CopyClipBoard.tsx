@@ -2,9 +2,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity,StyleSheet } from "react-native";
 import * as Clipboard from 'expo-clipboard';
 
-const CopyClipBoard = ({ text }: { text: string }) => {
+const CopyClipBoard = ({ text }: { text: string | null | undefined }) => {
 
-    const handleCopyId = async (text: string) => {
+    const handleCopyId = async (text: string | null | undefined) => {
+      if (!text) {
+        return;
+      }
         await Clipboard.setStringAsync(text);
     }
 

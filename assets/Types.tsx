@@ -47,7 +47,6 @@ export type UserProfile = {
     ifsc: string;
     ponumber: string;
     vendorname: string;
-    accountnumber: string;
     timestamp: Timestamp;
   }
 
