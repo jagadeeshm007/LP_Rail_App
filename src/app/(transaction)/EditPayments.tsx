@@ -204,7 +204,6 @@ const EditPaymentRequest = () => {
         ifsc: ifsc,
         ponumber: ponumber,
         vendorname: vendorname,
-        accountnumber: accountnumber,
         timestamp: firestore.Timestamp.now(),
     };
 
@@ -229,6 +228,7 @@ const EditPaymentRequest = () => {
       Recipts: transactionData?.Recipts || [],
       AccountantId: transactionData?.AccountantId || "",
       permitteby: transactionData?.permitteby || null,
+      PaymentMethods: transactionData?.PaymentMethods || "",
     };
 
     try {

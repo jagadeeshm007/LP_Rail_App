@@ -100,9 +100,9 @@ const Transaction: React.FC = () => {
         const parsedData = JSON.parse(decodeURIComponent(id.toString()));
         setTransactionData(parsedData);
         setStatus(parsedData.status);
+        settype(parsedData.PaymentMethods);
         if(parsedData.BankId || parsedData.development) {
           if(parsedData.BankId){
-            settype("Material and PO Payment");
             try{
             const data = fetchDocument("BankDetails", parsedData.BankId);
             data.then((doc) => {
@@ -114,7 +114,6 @@ const Transaction: React.FC = () => {
           }
           }
           else{
-            settype("General");
             try{
             const data = fetchDocument("developmentData", parsedData.development);
             data.then((doc) => {
@@ -450,7 +449,7 @@ const Transaction: React.FC = () => {
                 borderRadius: 8, 
                 elevation: 5, borderColor:"#978AA2",borderWidth:2}}>
                   <Text style={{ color: "#fff", fontSize: 16 }} numberOfLines={1} ellipsizeMode='tail'>
-                    Permitte by {transactionData.permitteby.name}
+                  Permitted by {transactionData.permitteby.name}
                   </Text>
               </Card>
             )}

@@ -7,11 +7,10 @@ import {
   TextInput,
   ActivityIndicator,
   Keyboard,
-  Alert,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import DropDownPicker from "react-native-dropdown-picker";
-import LottieView from "lottie-react-native";
 import ImagePickerComponent, {
   ImagePickerComponentRef,
 } from "@/src/components/ImagePicker";
@@ -19,27 +18,90 @@ import { useData } from "../../providers/DataProvider";
 import firestore from "@react-native-firebase/firestore";
 import { Stack } from "expo-router";
 import sendPushNotification from "@/src/lib/notifications";
-import { TransactionData } from "@/assets/Types";
+import { TransactionData,BankData } from "@/assets/Types";
+import { uploadImage } from "@/src/utils/uploadImage";
 type TransactionDataSnap = Omit<TransactionData, "id">;
 
 const PaymentRequest = () => {
+
+    // data hooks
   const { userProfile, postDocument, fetchCollection, fetchDocument } =
     useData();
+
+  // form state
+
   const [projectCodes, setProjectCodes] = useState<any[]>([]);
   const [amount, setAmount] = useState<string>("");
   const [itemName, setItemName] = useState<string>("");
   const [projectCode, setProjectCode] = useState<string | null>(null);
+  const [ponumber, setPonumber] = useState<string>("");
+  const [vendorname, setVendorname] = useState<string>("");
+  const [ifsc, setIfsc] = useState<string>("");
+  const [accountnumber, setAccountnumber] = useState<string>("");
+
+  // operations
   const [StatementOptions, setStatementOptions] = useState<any[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [openItem, setOpenItem] = useState<boolean>(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isOtherSelected, setIsOtherSelected] = useState<boolean>(false); // Manage "Other" selection
-  const [customStatement, setCustomStatement] = useState<string>(""); // Store custom statement
+  const [isOtherSelected, setIsOtherSelected] = useState<boolean>(false);
+  const [customStatement, setCustomStatement] = useState<string>("");
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
+  // refs
   const imagePickerRef = useRef<ImagePickerComponentRef>(null);
+
+  // helpers and effects for form operations and validations 
+  const notify = async (transactionData: TransactionData) => {
+    console.log("Transaction Data", transactionData);
+    if (userProfile?.mappedAdminId) {
+      console.log("User Profile", userProfile.mappedAdminId);
+      const tokens = await fetchDocument("Tokens", userProfile.mappedAdminId);
+      const sessions = tokens.sessions;
+      console.log("Tokens", tokens.sessions);
+      if (sessions.length > 0) {
+        sessions.map((session: string, index: string) => {
+          sendPushNotification(session, "Payment Request", "New Payment Request" ,transactionData);
+          console.log("Notification sent to", session);
+        });
+      }
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!amount) newErrors.amount = "Amount is required";
+    if (!projectCode) newErrors.projectCode = "Project Code is required";
+    // if (!ponumber) newErrors.ponumber = "PO Number is required";
+    // if (!vendorname) newErrors.vendorname = "Vendor Name is required";
+    // if (!ifsc) newErrors.ifsc = "IFSC Code is required";
+    // if (!accountnumber) newErrors.accountnumber = "Account Number is required";
+    // if (isOtherSelected && !customStatement)
+    //   newErrors.customStatement = "Custom statement is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const resetForm = () => {
+    setProjectCode(null);
+    setIsOtherSelected(false);
+    setItemName("");
+    setCustomStatement("");
+    setAmount("");
+    setItemName("");
+    setErrors({});
+    setPonumber("");
+    setVendorname("");
+    setIfsc("");
+    setAccountnumber("");
+    setOpen(false);
+    setOpenItem(false);
+    setImages([]);
+    imagePickerRef.current?.clearSelectedImages();
+  };
 
   const handleImagesSelected = (selectedImages: string[]) => {
     setImages(selectedImages);
@@ -47,41 +109,6 @@ const PaymentRequest = () => {
 
   const handlePickImages = () => {
     imagePickerRef.current?.pickImages();
-  };
-
-  const uploadImage = async (image: string): Promise<string | null> => {
-    const formData = new FormData();
-    const mail = "trancationData.id";
-
-    const props = {
-      uri: image,
-      type: "image/jpeg",
-      name: `upload_${Date.now()}.jpg`,
-    };
-
-    formData.append("file", props as unknown as Blob);
-    formData.append("public_id", `Data/${mail}/upload_${Date.now()}`);
-    formData.append("upload_preset", "Default");
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/dxvmt15ez/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      if (!response.ok) {
-        console.log("Response", response);
-        throw new Error(`Failed to upload image: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log("Upload successful:", result.secure_url);
-      return result.secure_url;
-    } catch (error) {
-      console.error("Upload failed:", error);
-      return null;
-    }
   };
 
   useEffect(() => {
@@ -93,21 +120,31 @@ const PaymentRequest = () => {
 
 
   const handleSubmit = async () => {
+
     if (!validateForm()) return;
 
     setLoading(true);
+
     const uploadedImages = await Promise.all(images.map(uploadImage));
     const successfulUploads = uploadedImages.filter((url) => url !== null);
+
     console.log("Uploaded images:", successfulUploads);
-    console.log(successfulUploads.length === uploadedImages.length);
     if (successfulUploads.length !== uploadedImages.length) {
       setLoading(false);
-      Alert.alert("Uploading Failed","Failed to upload images. Please try again.");
+      alert("Failed to upload images. Please try again.");
       return;
     }
 
-    const statement = isOtherSelected ? customStatement : itemName; // Use custom statement if "Other" is selected
+    const bankData: BankData = {
+        ifsc: ifsc,
+        ponumber: ponumber,
+        vendorname: vendorname,
+        accountNumber: accountnumber,
+        timestamp: firestore.Timestamp.now(),
+    };
 
+    const bankId  = await postDocument("BankDetails", bankData);
+    console.log("Bank Id", bankId);
     const transactionData: TransactionDataSnap = {
       amount,
       details: itemName,
@@ -121,64 +158,30 @@ const PaymentRequest = () => {
       timestamp: firestore.Timestamp.now(),
       urilinks: successfulUploads,
       AccountantUri: [],
-      BankId: "",
-      development:"",
+      BankId: bankId as string || "",
+      development: "",
       Recipts: [],
-      AccountantId: userProfile?.mappedAccountantId || "",
+      AccountantId: userProfile?.mappedAdminId || "",
       permitteby: null,
-      PaymentMethods : "Site Expenditure",
+      PaymentMethods: "Site Expenditure",
     };
 
     try {
       const id = await postDocument("transactions", transactionData);
+      console.log("Transaction ID", id);
       if (typeof id === "string") {
         // send notification to the admin
         const data = { id, ...transactionData };
         notify(data);
       }
       resetForm();
-      Alert.alert("","Payment request submitted successfully!");
+      alert("Payment request submitted successfully!");
     } catch (error) {
       console.error("Error submitting payment request:", error);
-      Alert.alert("","Failed to submit payment request. Please try again.");
+      alert("Failed to submit payment request. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const notify = async (transactionData: TransactionData) => {
-    console.log("Transaction Data", transactionData);
-    if (userProfile?.mappedAdminId) {
-      console.log("User Profile", userProfile.mappedAdminId);
-      const tokens = await fetchDocument("Tokens", userProfile.mappedAdminId);
-      const sessions = tokens.sessions;
-      console.log("Tokens", tokens.sessions);
-      if (sessions.length > 0) {
-        sessions.map((session: string, index: string) => {
-          sendPushNotification(session, "Payment Request","New Payment Request" ,transactionData);
-          console.log("Notification sent to", session);
-        });
-      }
-    }
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!amount) newErrors.amount = "Amount is required";
-    if (!projectCode) newErrors.projectCode = "Project Code is required";
-    // if(!itemName) newErrors.itemName = "Statement is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const resetForm = () => {
-    setAmount("");
-    setItemName("");
-    setProjectCode(null);
-    customStatement && setCustomStatement("");
-    setImages([]);
-    imagePickerRef.current?.clearSelectedImages();
   };
 
   useEffect(() => {
@@ -194,7 +197,6 @@ const PaymentRequest = () => {
         console.error("Error fetching project codes:", error);
       }
     };
-
     fetchProjectCodes();
   }, []);
 
@@ -216,12 +218,18 @@ const PaymentRequest = () => {
   }, []);
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true);
-    });
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false);
-    });
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
 
     return () => {
       keyboardDidHideListener.remove();
@@ -231,112 +239,115 @@ const PaymentRequest = () => {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: "Payment",
-          headerStyle: {
-            backgroundColor: "#222",
-          },
-          headerTintColor: "#fff",
-        }}
+      <Stack.Screen options={style} />
+
+      <DropDownPicker
+        open={open}
+        value={projectCode}
+        items={projectCodes}
+        setOpen={setOpen}
+        setValue={setProjectCode}
+        placeholder="Project"
+        textStyle={{ color: "#fff" }}
+        style={[styles.input, errors.projectCode ? styles.inputError : null]}
+        dropDownContainerStyle={[styles.dropdownContainer]}
+        zIndex={1000}
       />
 
-      <View style={styles.container}>
-        <LottieView
-          source={require("@/assets/animation_files/form.json")}
-          autoPlay={false}
-          loop={false}
-          style={styles.lottie}
+      <TextInput
+        placeholder="Amount"
+        placeholderTextColor="#fff"
+        value={amount}
+        onChangeText={setAmount}
+        style={[styles.input, errors.amount ? styles.inputError : null]}
+        keyboardType="numeric"
+      />
+
+      <TextInput
+        placeholder="PO Number"
+        placeholderTextColor="#fff"
+        value={ponumber}
+        onChangeText={setPonumber}
+        style={[styles.input, errors.ponumber ? styles.inputError : null]}
+        keyboardType="numeric"
+      />
+
+      <TextInput
+        placeholder="Vendor Name"
+        placeholderTextColor="#fff"
+        value={vendorname}
+        onChangeText={setVendorname}
+        style={[styles.input, errors.vendorname ? styles.inputError : null]}
+        keyboardType="default"
+      />
+
+      <TextInput
+        placeholder="IFSC Code"
+        placeholderTextColor="#fff"
+        value={ifsc}
+        onChangeText={setIfsc}
+        style={[styles.input, errors.ifsc ? styles.inputError : null]}
+        keyboardType="numeric"
+      />
+
+      <TextInput
+        placeholder="Account Number"
+        placeholderTextColor="#fff"
+        value={accountnumber}
+        onChangeText={setAccountnumber}
+        style={[styles.input, errors.accountnumber ? styles.inputError : null]}
+        keyboardType="numeric"
+      />
+
+      <DropDownPicker
+        open={openItem}
+        value={isOtherSelected ? "Other (Enter manually)" : itemName}
+        items={StatementOptions}
+        setOpen={setOpenItem}
+        setValue={(callback) => {
+          const value =
+            typeof callback === "function" ? callback(itemName) : callback;
+          if (value === "Other (Enter manually)") {
+            setIsOtherSelected(true);
+          } else {
+            setIsOtherSelected(false);
+            setItemName(value);
+          }
+        }}
+        placeholder="Material schedule No / Service Reason"
+        textStyle={{ color: "#fff" }}
+        style={[styles.input, errors.itemName ? styles.inputError : null]}
+        dropDownContainerStyle={styles.dropdownContainer}
+        zIndex={openItem ? 999 : 2}
+      />
+      {isOtherSelected && (
+        <TextInput
+          placeholder="Enter custom statement"
+          placeholderTextColor="#fff"
+          value={customStatement}
+          onChangeText={setCustomStatement}
+          style={[styles.input, errors.customStatement ? styles.inputError : null]}
         />
-        <View style={styles.pickerContainer}>
-          <DropDownPicker
-            open={open}
-            value={projectCode}
-            items={projectCodes}
-            setOpen={setOpen}
-            setValue={setProjectCode}
-            placeholder="Project"
-            textStyle={{ color: "#fff" }}
-            style={[
-              styles.dropdown,
-              errors.projectCode ? { borderColor: "#E53935" } : null,
-              open ? { zIndex: 1000 } : { zIndex: 1 }, // Fix dropdown z-index issue
-            ]}
-            dropDownContainerStyle={[styles.dropdownContainer,open ? { zIndex: 1000 } : { zIndex: 1 }, ]}
-          />
-        </View>
-        <View style={styles.form}>
-          <TextInput
-            placeholder="Amount"
-            placeholderTextColor="#fff"
-            value={amount}
-            onChangeText={setAmount}
-            style={[styles.input, errors.amount ? styles.inputError : null]}
-            keyboardType="numeric"
-          />
+      )}
 
-          <DropDownPicker
-            open={openItem}
-            value={isOtherSelected ? "Other (Enter manually)" : itemName}
-            items={StatementOptions}
-            setOpen={setOpenItem}
-            setValue={(callback) => {
-              const value =
-                typeof callback === "function" ? callback(itemName) : callback;
-              if (value === "Other (Enter manually)") {
-                setIsOtherSelected(true);
-              } else {
-                setIsOtherSelected(false);
-                setItemName(value);
-              }
-            }}
-            placeholder="Statement"
-            textStyle={{ color: "#fff" }}
-            style={[
-              styles.dropdown,
-              ((errors.itemName) && !errors.customStatement )? { borderColor: "#E53935" } : null,
-            ]}
-            dropDownContainerStyle={styles.dropdownContainer}
-            zIndex={openItem ? 999 : 2}
-          />
+      <TouchableOpacity onPress={handlePickImages} style={styles.fileButton}>
+        <Text style={styles.fileButtonText}>Pick Files</Text>
+      </TouchableOpacity>
 
-          {isOtherSelected && (
-            <TextInput
-              placeholder="Enter custom statement"
-              placeholderTextColor="#fff"
-              value={customStatement}
-              onChangeText={setCustomStatement}
-              style={[
-                styles.input,
-                { marginTop: 10 },
-                errors.customStatement ? styles.inputError : null,
-              ]}
-            />
-          )}
+      <ImagePickerComponent
+        ref={imagePickerRef}
+        onImagesSelected={handleImagesSelected}
+      />
 
-          <TouchableOpacity
-            onPress={handlePickImages}
-            style={styles.fileButton}
-          >
-            <Text style={styles.fileButtonText}>Pick Files</Text>
-          </TouchableOpacity>
-          <ImagePickerComponent
-            ref={imagePickerRef}
-            onImagesSelected={handleImagesSelected}
-          />
-          {!isKeyboardVisible && (
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={handleSubmit}
-              style={styles.submitButton}
-              disabled={loading}
-            >
-              <Text style={styles.submitButtonText}>Submit</Text>
-            </TouchableOpacity>
-          </View>)}
-          
-        </View>
-      </View>
+      {!isKeyboardVisible && (
+        <TouchableOpacity
+          onPress={handleSubmit}
+          style={styles.submitButton}
+          disabled={loading}
+        >
+          <Text style={styles.submitButtonText}>Submit</Text>
+        </TouchableOpacity>
+      )}
 
       {loading && (
         <View style={styles.loadingOverlay}>
@@ -353,7 +364,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingHorizontal: 10,
+    padding: 10,
     backgroundColor: "#222",
     width: "100%",
   },
@@ -362,13 +373,13 @@ const styles = StyleSheet.create({
     borderColor: "#333",
     borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 10,
     backgroundColor: "#444",
     fontSize: 16,
     color: "#fff",
     width: "100%",
     elevation: 2,
+    marginVertical: 5,
+    paddingHorizontal: 10,
   },
   inputError: {
     borderColor: "#E53935",
@@ -376,12 +387,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: "#E53935",
     fontSize: 14,
-    marginBottom: 10,
     alignSelf: "flex-start",
-  },
-  pickerContainer: {
-    width: "100%",
-    marginBottom: 10,
   },
   dropdown: {
     backgroundColor: "#444",
@@ -390,7 +396,6 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   dropdownContainer: {
-    marginBottom: 10,
     backgroundColor: "#444",
     borderColor: "#333",
     borderRadius: 10,
@@ -398,53 +403,48 @@ const styles = StyleSheet.create({
   },
   fileButton: {
     backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: "center",
-    marginBottom: 10,
-    marginTop: 10,
     width: "100%",
+    padding: 15,
+    elevation: 2,
   },
   fileButtonText: {
-    
     color: "#FFF",
     fontSize: 16,
   },
   submitButton: {
     backgroundColor: "#1E3A8A",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: "center",
     width: "100%",
-  },
-  submitButtonText: {
-    color: "#FFF",
-    fontSize: 16,
-  },
-  buttonContainer: {
     position: "absolute",
     bottom: 20,
     alignContent: "center",
     justifyContent: "center",
-    marginTop: 20,
-    width: "100%",
+    padding: 15,
+  },
+  submitButtonText: {
+    color: "#FFF",
+    fontSize: 16,
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1,
-  },
-  form: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-  },
-  lottie: {
-    width: 150,
-    height: 150,
+    alignContent: "center",
+    zIndex: 1000,
   },
 });
+
+const style: NativeStackNavigationOptions = {
+  title: "Payment",
+  headerStyle: {
+    backgroundColor: "#222",
+  },
+  headerTintColor: "#fff",
+  contentStyle: {
+    backgroundColor: "#222",
+  },
+};
