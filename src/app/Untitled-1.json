@@ -1,0 +1,1592 @@
+{
+	"knownSymbols": {
+		"validInitialScrollIndex": [
+			{
+				"name": "validInitialScrollIndex",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\validInitialScrollIndex.ts",
+				"isDefault": true
+			}
+		],
+		"uploadToCloudinary": [
+			{
+				"name": "uploadToCloudinary",
+				"module": "@/src/utils/uploadToCloudinary",
+				"isDefault": true
+			},
+			{
+				"name": "uploadToCloudinary",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\uploadToCloudinary.ts",
+				"isDefault": true
+			}
+		],
+		"uploadImage": [
+			{
+				"name": "uploadImage",
+				"module": "@/src/utils/uploadImage",
+				"isDefault": false
+			},
+			{
+				"name": "uploadImage",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\uploadImage.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"UpdateStatusHandler": [
+			{
+				"name": "UpdateStatusHandler",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\UpdateStatusHandler.tsx",
+				"isDefault": true
+			}
+		],
+		"React": [
+			{
+				"name": "React",
+				"module": "react",
+				"isDefault": true,
+				"asDefinition": "* as React"
+			}
+		],
+		"Alert": [
+			{
+				"name": "Alert",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"doc": [
+			{
+				"name": "doc",
+				"module": "@react-native-firebase/firestore",
+				"isDefault": false
+			}
+		],
+		"updateDoc": [
+			{
+				"name": "updateDoc",
+				"module": "@react-native-firebase/firestore",
+				"isDefault": false
+			}
+		],
+		"getFirestore": [
+			{
+				"name": "getFirestore",
+				"module": "@react-native-firebase/firestore",
+				"isDefault": false
+			}
+		],
+		"Timestamp": [
+			{
+				"name": "Timestamp",
+				"module": "@react-native-firebase/firestore",
+				"isDefault": false
+			}
+		],
+		"saveImageToGallery": [
+			{
+				"name": "saveImageToGallery",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\saveImageToGallery.ts",
+				"isDefault": true
+			}
+		],
+		"FileSystem": [
+			{
+				"name": "FileSystem",
+				"module": "expo-file-system",
+				"isDefault": true,
+				"asDefinition": "* as FileSystem"
+			}
+		],
+		"MediaLibrary": [
+			{
+				"name": "MediaLibrary",
+				"module": "expo-media-library",
+				"isDefault": true,
+				"asDefinition": "* as MediaLibrary"
+			}
+		],
+		"async": [
+			{
+				"name": "async",
+				"path": "d:\\flynexus\\PayBill\\src\\lib\\notifications.tsx",
+				"isDefault": true
+			}
+		],
+		"Notifications": [
+			{
+				"name": "Notifications",
+				"module": "expo-notifications",
+				"isDefault": true,
+				"asDefinition": "* as Notifications"
+			}
+		],
+		"Device": [
+			{
+				"name": "Device",
+				"module": "expo-device",
+				"isDefault": true,
+				"asDefinition": "* as Device"
+			}
+		],
+		"Constants": [
+			{
+				"name": "Constants",
+				"module": "expo-constants",
+				"isDefault": true
+			}
+		],
+		"Platform": [
+			{
+				"name": "Platform",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"ImagePickerHandler": [
+			{
+				"name": "ImagePickerHandler",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\ImagePickerHandler.ts",
+				"isDefault": true
+			}
+		],
+		"ImagePicker": [
+			{
+				"name": "ImagePicker",
+				"module": "expo-image-picker",
+				"isDefault": true,
+				"asDefinition": "* as ImagePicker"
+			}
+		],
+		"handleUpdateStatus": [
+			{
+				"name": "handleUpdateStatus",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\handleUpdateStatus.ts",
+				"isDefault": true
+			}
+		],
+		"handleReturnfiles": [
+			{
+				"name": "handleReturnfiles",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\handleReturnfiles.ts",
+				"isDefault": true
+			}
+		],
+		"handleImageClick": [
+			{
+				"name": "handleImageClick",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\handleImageClick.ts",
+				"isDefault": true
+			}
+		],
+		"handleDeny": [
+			{
+				"name": "handleDeny",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\handleDeny.ts",
+				"isDefault": true
+			}
+		],
+		"GreetingMessage": [
+			{
+				"name": "GreetingMessage",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\Getgreetings.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"closeMenu": [
+			{
+				"name": "closeMenu",
+				"path": "d:\\flynexus\\PayBill\\src\\utils\\closeMenu.ts",
+				"isDefault": true
+			}
+		],
+		"useNotification": [
+			{
+				"name": "useNotification",
+				"module": "@/src/providers/NotificationContext",
+				"isDefault": false
+			},
+			{
+				"name": "useNotification",
+				"path": "d:\\flynexus\\PayBill\\src\\providers\\NotificationContext.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"NotificationProvider": [
+			{
+				"name": "NotificationProvider",
+				"path": "d:\\flynexus\\PayBill\\src\\providers\\NotificationContext.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"Subscription": [
+			{
+				"name": "Subscription",
+				"module": "expo-modules-core",
+				"isDefault": false
+			}
+		],
+		"registerForPushNotificationsAsync": [
+			{
+				"name": "registerForPushNotificationsAsync",
+				"module": "@/src/utils/registerForPushNotificationsAsync",
+				"isDefault": false
+			}
+		],
+		"useRouter": [
+			{
+				"name": "useRouter",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"DataProvider": [
+			{
+				"name": "DataProvider",
+				"module": "@/src/providers/DataProvider",
+				"isDefault": true
+			},
+			{
+				"name": "DataProvider",
+				"path": "d:\\flynexus\\PayBill\\src\\providers\\DataProvider.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"useData": [
+			{
+				"name": "useData",
+				"module": "@/src/providers/DataProvider",
+				"isDefault": false
+			},
+			{
+				"name": "useData",
+				"path": "d:\\flynexus\\PayBill\\src\\providers\\DataProvider.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"ActivityIndicator": [
+			{
+				"name": "ActivityIndicator",
+				"module": "react-native-paper",
+				"isDefault": false
+			},
+			{
+				"name": "ActivityIndicator",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"View": [
+			{
+				"name": "View",
+				"module": "react-native",
+				"isDefault": false
+			},
+			{
+				"name": "View",
+				"module": "@/src/components/Themed",
+				"isDefault": false
+			},
+			{
+				"name": "View",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Themed.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"StyleSheet": [
+			{
+				"name": "StyleSheet",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"Firestore": [
+			{
+				"name": "Firestore",
+				"module": "@react-native-firebase/firestore",
+				"isDefault": true
+			}
+		],
+		"Messaging": [
+			{
+				"name": "Messaging",
+				"module": "@react-native-firebase/messaging",
+				"isDefault": true
+			}
+		],
+		"roles": [
+			{
+				"name": "roles",
+				"path": "d:\\flynexus\\PayBill\\assets\\Types.tsx",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "roles",
+				"module": "@/assets/Types",
+				"isDefault": false
+			}
+		],
+		"UserProfile": [
+			{
+				"name": "UserProfile",
+				"path": "d:\\flynexus\\PayBill\\assets\\Types.tsx",
+				"type": "type",
+				"isDefault": false
+			},
+			{
+				"name": "UserProfile",
+				"module": "@/assets/Types",
+				"isDefault": false
+			}
+		],
+		"AuthProvider": [
+			{
+				"name": "AuthProvider",
+				"module": "@/src/providers/AuthProvider",
+				"isDefault": true
+			},
+			{
+				"name": "AuthProvider",
+				"path": "d:\\flynexus\\PayBill\\src\\providers\\AuthProvider.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"useAuth": [
+			{
+				"name": "useAuth",
+				"module": "@/src/providers/AuthProvider",
+				"isDefault": false
+			},
+			{
+				"name": "useAuth",
+				"path": "d:\\flynexus\\PayBill\\src\\providers\\AuthProvider.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"auth": [
+			{
+				"name": "auth",
+				"module": "@react-native-firebase/auth",
+				"isDefault": true
+			}
+		],
+		"{ FirebaseAuthTypes": [
+			{
+				"name": "{ FirebaseAuthTypes",
+				"module": "@react-native-firebase/auth",
+				"isDefault": true
+			}
+		],
+		"axios": [
+			{
+				"name": "axios",
+				"module": "axios",
+				"isDefault": true
+			}
+		],
+		"defaultStyles": [
+			{
+				"name": "defaultStyles",
+				"module": "@/src/constants/Styles",
+				"isDefault": false
+			},
+			{
+				"name": "defaultStyles",
+				"path": "d:\\flynexus\\PayBill\\src\\constants\\Styles.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"ColorPalette": [
+			{
+				"name": "ColorPalette",
+				"module": "@/src/constants/Colors",
+				"isDefault": false
+			},
+			{
+				"name": "ColorPalette",
+				"path": "d:\\flynexus\\PayBill\\src\\constants\\Colors.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"Colors": [
+			{
+				"name": "Colors",
+				"module": "@/src/constants/Colors",
+				"isDefault": false
+			},
+			{
+				"name": "Colors",
+				"path": "d:\\flynexus\\PayBill\\src\\constants\\Colors.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"AccountantButtons": [
+			{
+				"name": "AccountantButtons",
+				"module": "@/src/components/AccButtons",
+				"isDefault": true
+			},
+			{
+				"name": "AccountantButtons",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\AccButtons.tsx",
+				"isDefault": true
+			}
+		],
+		"Button": [
+			{
+				"name": "Button",
+				"module": "react-native-paper",
+				"isDefault": false
+			},
+			{
+				"name": "Button",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"Button as PaperButton": [
+			{
+				"name": "Button as PaperButton",
+				"module": "react-native-paper",
+				"isDefault": false
+			}
+		],
+		"useColorScheme": [
+			{
+				"name": "useColorScheme",
+				"module": "@/src/components/useColorScheme",
+				"isDefault": false
+			},
+			{
+				"name": "useColorScheme",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\useColorScheme.web.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"useClientOnlyValue": [
+			{
+				"name": "useClientOnlyValue",
+				"module": "@/src/components/useClientOnlyValue",
+				"isDefault": false
+			},
+			{
+				"name": "useClientOnlyValue",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\useClientOnlyValue.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"TransactionElement": [
+			{
+				"name": "TransactionElement",
+				"module": "@/src/components/TransactionElement",
+				"isDefault": true
+			},
+			{
+				"name": "TransactionElement",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\TransactionElement.tsx",
+				"isDefault": true
+			}
+		],
+		"Text": [
+			{
+				"name": "Text",
+				"module": "react-native",
+				"isDefault": false
+			},
+			{
+				"name": "Text",
+				"module": "react-native-paper",
+				"isDefault": false
+			},
+			{
+				"name": "Text",
+				"module": "@/src/components/Themed",
+				"isDefault": false
+			},
+			{
+				"name": "Text",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Themed.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Dimensions": [
+			{
+				"name": "Dimensions",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"MaterialCommunityIcons": [
+			{
+				"name": "MaterialCommunityIcons",
+				"module": "@expo/vector-icons",
+				"isDefault": false
+			},
+			{
+				"name": "MaterialCommunityIcons",
+				"module": "@expo/vector-icons/MaterialCommunityIcons",
+				"isDefault": true
+			}
+		],
+		"TouchableOpacity": [
+			{
+				"name": "TouchableOpacity",
+				"module": "react-native",
+				"isDefault": false
+			},
+			{
+				"name": "TouchableOpacity",
+				"module": "react-native-gesture-handler",
+				"isDefault": false
+			}
+		],
+		"TransactionData": [
+			{
+				"name": "TransactionData",
+				"path": "d:\\flynexus\\PayBill\\assets\\Types.tsx",
+				"type": "interface",
+				"isDefault": false
+			},
+			{
+				"name": "TransactionData",
+				"module": "@/assets/Types",
+				"isDefault": false
+			}
+		],
+		"getStatusColor": [
+			{
+				"name": "getStatusColor",
+				"module": "@/src/utils/TransactionStatus",
+				"isDefault": false
+			}
+		],
+		"TextProps": [
+			{
+				"name": "TextProps",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Themed.tsx",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"ViewProps": [
+			{
+				"name": "ViewProps",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Themed.tsx",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"useThemeColor": [
+			{
+				"name": "useThemeColor",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Themed.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Text as DefaultText": [
+			{
+				"name": "Text as DefaultText",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"View as DefaultView": [
+			{
+				"name": "View as DefaultView",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"MonoText": [
+			{
+				"name": "MonoText",
+				"module": "@/src/components/StyledText",
+				"isDefault": false
+			},
+			{
+				"name": "MonoText",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\StyledText.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"ShareButton": [
+			{
+				"name": "ShareButton",
+				"module": "@/src/components/ShareButton",
+				"isDefault": true
+			},
+			{
+				"name": "ShareButton",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\ShareButton.tsx",
+				"isDefault": true
+			}
+		],
+		"Pressable": [
+			{
+				"name": "Pressable",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"captureRef": [
+			{
+				"name": "captureRef",
+				"module": "react-native-view-shot",
+				"isDefault": false
+			}
+		],
+		"Sharing": [
+			{
+				"name": "Sharing",
+				"module": "expo-sharing",
+				"isDefault": true,
+				"asDefinition": "* as Sharing"
+			}
+		],
+		"Ionicons": [
+			{
+				"name": "Ionicons",
+				"module": "@expo/vector-icons",
+				"isDefault": false
+			},
+			{
+				"name": "Ionicons",
+				"module": "@expo/vector-icons/Ionicons",
+				"isDefault": true
+			}
+		],
+		"RoleBadge": [
+			{
+				"name": "RoleBadge",
+				"module": "@/src/components/RoleBadge",
+				"isDefault": true
+			},
+			{
+				"name": "RoleBadge",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\RoleBadge.tsx",
+				"isDefault": true
+			}
+		],
+		"ViewStyle": [
+			{
+				"name": "ViewStyle",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"TextStyle": [
+			{
+				"name": "TextStyle",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"ProfileOptions": [
+			{
+				"name": "ProfileOptions",
+				"module": "@/src/components/ProfileOptions",
+				"isDefault": true
+			},
+			{
+				"name": "ProfileOptions",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\ProfileOptions.tsx",
+				"isDefault": true
+			}
+		],
+		"MaterialIcons": [
+			{
+				"name": "MaterialIcons",
+				"module": "@expo/vector-icons/MaterialIcons",
+				"isDefault": true
+			}
+		],
+		"Link": [
+			{
+				"name": "Link",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"ProfileDetails": [
+			{
+				"name": "ProfileDetails",
+				"module": "@/src/components/ProfileDetails",
+				"isDefault": true
+			},
+			{
+				"name": "ProfileDetails",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\ProfileDetails.tsx",
+				"isDefault": true
+			}
+		],
+		"Image": [
+			{
+				"name": "Image",
+				"module": "expo-image",
+				"isDefault": false
+			},
+			{
+				"name": "Image",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"FirebaseAuthTypes": [
+			{
+				"name": "FirebaseAuthTypes",
+				"module": "@react-native-firebase/auth",
+				"isDefault": false
+			}
+		],
+		"PaymentSlip": [
+			{
+				"name": "PaymentSlip",
+				"module": "@/src/components/PaymentSlip",
+				"isDefault": true
+			},
+			{
+				"name": "PaymentSlip",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\PaymentSlip.tsx",
+				"isDefault": true
+			}
+		],
+		"formatTimestamp": [
+			{
+				"name": "formatTimestamp",
+				"module": "@/src/utils/TimeFormat",
+				"isDefault": false
+			}
+		],
+		"CopyClipBoard": [
+			{
+				"name": "CopyClipBoard",
+				"module": "@/src/components/CopyClipBoard",
+				"isDefault": true
+			},
+			{
+				"name": "CopyClipBoard",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\CopyClipBoard.tsx",
+				"isDefault": true
+			}
+		],
+		"Page404Error": [
+			{
+				"name": "Page404Error",
+				"module": "@/src/components/Page404Error",
+				"isDefault": true
+			},
+			{
+				"name": "Page404Error",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Page404Error.tsx",
+				"isDefault": true
+			}
+		],
+		"router": [
+			{
+				"name": "router",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"AdminActions": [
+			{
+				"name": "AdminActions",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\MainButtons.tsx",
+				"isDefault": true
+			}
+		],
+		"ImagePickerComponentRef": [
+			{
+				"name": "ImagePickerComponentRef",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\ImagePicker.tsx",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"ImagePickerComponent": [
+			{
+				"name": "ImagePickerComponent",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\ImagePicker.tsx",
+				"isDefault": true
+			}
+		],
+		"{ useState": [
+			{
+				"name": "{ useState",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"forwardRef": [
+			{
+				"name": "forwardRef",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"useImperativeHandle": [
+			{
+				"name": "useImperativeHandle",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"FlatList": [
+			{
+				"name": "FlatList",
+				"module": "react-native",
+				"isDefault": false
+			},
+			{
+				"name": "FlatList",
+				"module": "react-native-gesture-handler",
+				"isDefault": false
+			}
+		],
+		"Home": [
+			{
+				"name": "Home",
+				"module": "@/src/components/HomePage",
+				"isDefault": true
+			},
+			{
+				"name": "Home",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\index.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Fontisto": [
+			{
+				"name": "Fontisto",
+				"module": "@expo/vector-icons/Fontisto",
+				"isDefault": true
+			}
+		],
+		"TouchableOpacityWithLoading": [
+			{
+				"name": "TouchableOpacityWithLoading",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\HOC.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"PressableWithLoading": [
+			{
+				"name": "PressableWithLoading",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\HOC.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"Form": [
+			{
+				"name": "Form",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Form.tsx",
+				"isDefault": true
+			}
+		],
+		"Features": [
+			{
+				"name": "Features",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\Features.tsx",
+				"isDefault": true
+			}
+		],
+		"LottieView": [
+			{
+				"name": "LottieView",
+				"module": "lottie-react-native",
+				"isDefault": true
+			}
+		],
+		"useState": [
+			{
+				"name": "useState",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"useRef": [
+			{
+				"name": "useRef",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"ExternalLink": [
+			{
+				"name": "ExternalLink",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\ExternalLink.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"WebBrowser": [
+			{
+				"name": "WebBrowser",
+				"module": "expo-web-browser",
+				"isDefault": true,
+				"asDefinition": "* as WebBrowser"
+			}
+		],
+		"EditScreenInfo": [
+			{
+				"name": "EditScreenInfo",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\EditScreenInfo.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Clipboard": [
+			{
+				"name": "Clipboard",
+				"module": "expo-clipboard",
+				"isDefault": true,
+				"asDefinition": "* as Clipboard"
+			}
+		],
+		"BottomLoginSheet": [
+			{
+				"name": "BottomLoginSheet",
+				"module": "@/src/components/BottomLoginSheet",
+				"isDefault": true
+			},
+			{
+				"name": "BottomLoginSheet",
+				"path": "d:\\flynexus\\PayBill\\src\\components\\BottomLoginSheet.tsx",
+				"isDefault": true
+			}
+		],
+		"useSafeAreaInsets": [
+			{
+				"name": "useSafeAreaInsets",
+				"module": "react-native-safe-area-context",
+				"isDefault": false
+			}
+		],
+		"memo": [
+			{
+				"name": "memo",
+				"module": "react",
+				"isDefault": true
+			},
+			{
+				"name": "memo",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(forms)\\FormPage.tsx",
+				"isDefault": true
+			}
+		],
+		"useWindowDimensions": [
+			{
+				"name": "useWindowDimensions",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"ReText": [
+			{
+				"name": "ReText",
+				"module": "react-native-redash",
+				"isDefault": false
+			}
+		],
+		"unstable_settings": [
+			{
+				"name": "unstable_settings",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\_layout.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"RootLayout": [
+			{
+				"name": "RootLayout",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\_layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Stack": [
+			{
+				"name": "Stack",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"FontAwesome": [
+			{
+				"name": "FontAwesome",
+				"module": "@expo/vector-icons/FontAwesome",
+				"isDefault": true
+			}
+		],
+		"useFonts": [
+			{
+				"name": "useFonts",
+				"module": "expo-font",
+				"isDefault": false
+			}
+		],
+		"SplashScreen": [
+			{
+				"name": "SplashScreen",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"useEffect": [
+			{
+				"name": "useEffect",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"Toast": [
+			{
+				"name": "Toast",
+				"module": "react-native-toast-message",
+				"isDefault": true
+			}
+		],
+		"TaskManager": [
+			{
+				"name": "TaskManager",
+				"module": "expo-task-manager",
+				"isDefault": true,
+				"asDefinition": "* as TaskManager"
+			}
+		],
+		"messaging": [
+			{
+				"name": "messaging",
+				"module": "@react-native-firebase/messaging",
+				"isDefault": true
+			}
+		],
+		"StatusBar": [
+			{
+				"name": "StatusBar",
+				"module": "expo-status-bar",
+				"isDefault": false
+			},
+			{
+				"name": "StatusBar",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"WorkUpdate": [
+			{
+				"name": "WorkUpdate",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\workupdate.tsx",
+				"isDefault": true
+			}
+		],
+		"sendLocalNotification": [
+			{
+				"name": "sendLocalNotification",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\UsersData.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"HomeScreen": [
+			{
+				"name": "HomeScreen",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\UsersData.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"SafeAreaView": [
+			{
+				"name": "SafeAreaView",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"sendPushNotification": [
+			{
+				"name": "sendPushNotification",
+				"module": "@/src/lib/notifications",
+				"isDefault": true
+			}
+		],
+		"UpdateApp": [
+			{
+				"name": "UpdateApp",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\Update.tsx",
+				"isDefault": true
+			}
+		],
+		"Application": [
+			{
+				"name": "Application",
+				"module": "expo-application",
+				"isDefault": true,
+				"asDefinition": "* as Application"
+			}
+		],
+		"firestore": [
+			{
+				"name": "firestore",
+				"module": "@react-native-firebase/firestore",
+				"isDefault": true
+			}
+		],
+		"Updates": [
+			{
+				"name": "Updates",
+				"module": "expo-updates",
+				"isDefault": true,
+				"asDefinition": "* as Updates"
+			}
+		],
+		"Settings": [
+			{
+				"name": "Settings",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\Setting.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"TabOneScreen": [
+			{
+				"name": "TabOneScreen",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(tabs)\\index.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"BottomSheet": [
+			{
+				"name": "BottomSheet",
+				"module": "@gorhom/bottom-sheet",
+				"isDefault": true
+			}
+		],
+		"{ BottomSheetBackdrop": [
+			{
+				"name": "{ BottomSheetBackdrop",
+				"module": "@gorhom/bottom-sheet",
+				"isDefault": true
+			}
+		],
+		"BottomSheetTextInput": [
+			{
+				"name": "BottomSheetTextInput",
+				"module": "@gorhom/bottom-sheet",
+				"isDefault": true
+			}
+		],
+		"useCallback": [
+			{
+				"name": "useCallback",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"useMemo": [
+			{
+				"name": "useMemo",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"Keyboard": [
+			{
+				"name": "Keyboard",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"GestureHandlerRootView": [
+			{
+				"name": "GestureHandlerRootView",
+				"module": "react-native-gesture-handler",
+				"isDefault": false
+			}
+		],
+		"History": [
+			{
+				"name": "History",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\MyRequests.tsx",
+				"isDefault": true
+			}
+		],
+		"{ useCallback": [
+			{
+				"name": "{ useCallback",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"TextInput": [
+			{
+				"name": "TextInput",
+				"module": "react-native-paper",
+				"isDefault": false
+			},
+			{
+				"name": "TextInput",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"NotificationsScreen": [
+			{
+				"name": "NotificationsScreen",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\NotificationsScreen.tsx",
+				"isDefault": true
+			}
+		],
+		"Card": [
+			{
+				"name": "Card",
+				"module": "react-native-paper",
+				"isDefault": false
+			}
+		],
+		"moment": [
+			{
+				"name": "moment",
+				"module": "moment",
+				"isDefault": true
+			}
+		],
+		"useNavigation": [
+			{
+				"name": "useNavigation",
+				"module": "@react-navigation/native",
+				"isDefault": false
+			}
+		],
+		"Redirect": [
+			{
+				"name": "Redirect",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"DataView": [
+			{
+				"name": "DataView",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\DataView.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"About": [
+			{
+				"name": "About",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\About.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"NotFoundScreen": [
+			{
+				"name": "NotFoundScreen",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\+not-found.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Navigation": [
+			{
+				"name": "Navigation",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(transaction)\\_layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Transaction": [
+			{
+				"name": "Transaction",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(transaction)\\index.tsx",
+				"isDefault": true
+			}
+		],
+		"{ useRef": [
+			{
+				"name": "{ useRef",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"useLocalSearchParams": [
+			{
+				"name": "useLocalSearchParams",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"Modal": [
+			{
+				"name": "Modal",
+				"module": "react-native-paper",
+				"isDefault": false
+			}
+		],
+		"BankData": [
+			{
+				"name": "BankData",
+				"path": "d:\\flynexus\\PayBill\\assets\\Types.tsx",
+				"type": "interface",
+				"isDefault": false
+			},
+			{
+				"name": "BankData",
+				"module": "@/assets/Types",
+				"isDefault": false
+			}
+		],
+		"developmentData": [
+			{
+				"name": "developmentData",
+				"path": "d:\\flynexus\\PayBill\\assets\\Types.tsx",
+				"type": "interface",
+				"isDefault": false
+			},
+			{
+				"name": "developmentData",
+				"module": "@/assets/Types",
+				"isDefault": false
+			}
+		],
+		"MainButtons": [
+			{
+				"name": "MainButtons",
+				"module": "@/src/components/MainButtons",
+				"isDefault": true
+			}
+		],
+		"DropDownPicker": [
+			{
+				"name": "DropDownPicker",
+				"module": "react-native-dropdown-picker",
+				"isDefault": true
+			}
+		],
+		"NativeStackNavigationOptions": [
+			{
+				"name": "NativeStackNavigationOptions",
+				"module": "@react-navigation/native-stack",
+				"isDefault": false
+			},
+			{
+				"name": "NativeStackNavigationOptions",
+				"module": "react-native-screens/lib/typescript/native-stack/types",
+				"isDefault": false
+			}
+		],
+		"UserButtons": [
+			{
+				"name": "UserButtons",
+				"module": "@/src/components/UserButtons",
+				"isDefault": true
+			}
+		],
+		"ImageViewing": [
+			{
+				"name": "ImageViewing",
+				"module": "react-native-image-viewing",
+				"isDefault": true
+			}
+		],
+		"TabLayout": [
+			{
+				"name": "TabLayout",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(tabs)\\_layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"{ useEffect": [
+			{
+				"name": "{ useEffect",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"Tabs": [
+			{
+				"name": "Tabs",
+				"module": "expo-router",
+				"isDefault": false
+			}
+		],
+		"FontAwesome6": [
+			{
+				"name": "FontAwesome6",
+				"module": "@expo/vector-icons/FontAwesome6",
+				"isDefault": true
+			}
+		],
+		"Octicons": [
+			{
+				"name": "Octicons",
+				"module": "@expo/vector-icons/Octicons",
+				"isDefault": true
+			}
+		],
+		"createBottomTabNavigator": [
+			{
+				"name": "createBottomTabNavigator",
+				"module": "@react-navigation/bottom-tabs",
+				"isDefault": false
+			}
+		],
+		"Profile": [
+			{
+				"name": "Profile",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(tabs)\\Profile.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"pushDummyDataToFirebase": [
+			{
+				"name": "pushDummyDataToFirebase",
+				"module": "@/src/providers/Dummypusher",
+				"isDefault": true
+			}
+		],
+		"PermissionsAndroid": [
+			{
+				"name": "PermissionsAndroid",
+				"module": "react-native",
+				"isDefault": false
+			}
+		],
+		"{ memo": [
+			{
+				"name": "{ memo",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"ScrollView": [
+			{
+				"name": "ScrollView",
+				"module": "react-native-gesture-handler",
+				"isDefault": false
+			}
+		],
+		"Searchbar": [
+			{
+				"name": "Searchbar",
+				"module": "react-native-paper",
+				"isDefault": false
+			}
+		],
+		"AuthLayout": [
+			{
+				"name": "AuthLayout",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(auth)\\_layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"PaymentMethods": [
+			{
+				"name": "PaymentMethods",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(forms)\\index.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Page": [
+			{
+				"name": "Page",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(auth)\\login.tsx",
+				"isDefault": true
+			}
+		],
+		"FirebaseError": [
+			{
+				"name": "FirebaseError",
+				"module": "firebase/app",
+				"isDefault": false
+			}
+		],
+		"Index": [
+			{
+				"name": "Index",
+				"path": "d:\\flynexus\\PayBill\\src\\app\\(auth)\\index.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"AnimatedIntro": [
+			{
+				"name": "AnimatedIntro",
+				"module": "@/src/components/AnimatedIntro",
+				"isDefault": true
+			}
+		],
+		"enableScreens": [
+			{
+				"name": "enableScreens",
+				"module": "react-native-screens",
+				"isDefault": false
+			}
+		],
+		"NavigationBar": [
+			{
+				"name": "NavigationBar",
+				"module": "expo-navigation-bar",
+				"isDefault": true,
+				"asDefinition": "* as NavigationBar"
+			}
+		],
+		"permittebytype": [
+			{
+				"name": "permittebytype",
+				"path": "d:\\flynexus\\PayBill\\assets\\Types.tsx",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"namespace": [
+			{
+				"name": "namespace",
+				"path": "d:\\flynexus\\PayBill\\.expo\\types\\router.d.ts",
+				"isDefault": false
+			}
+		],
+		"__routes": [
+			{
+				"name": "__routes",
+				"path": "d:\\flynexus\\PayBill\\.expo\\types\\router.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"Router": [
+			{
+				"name": "Router",
+				"module": "expo-router",
+				"isDefault": true,
+				"asDefinition": "* as Router"
+			}
+		]
+	}
+}
