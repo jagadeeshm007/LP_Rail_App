@@ -13,6 +13,15 @@ const UpdateApp: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [data, setData] = useState<any>(null);
+  const [update, setUpdate] = useState<any>(null);
+
+  useEffect(() => {
+    const checkForUpdate = async () => {
+      const update = await Updates.checkForUpdateAsync();
+      setUpdate(update);
+    };
+    checkForUpdate();
+  }, []);
 
   const currentVersion = Application.nativeApplicationVersion || '1.0.0';
 
@@ -105,6 +114,7 @@ const UpdateApp: React.FC = () => {
       <Text style={styles.title}>Pay Bill</Text>
       <Text style={styles.text}>App Version {Application.nativeApplicationVersion}</Text>
       <Text style={styles.text}>Build Version {Application.nativeBuildVersion}</Text>
+      <Text style={styles.text}>Updates on {update.isAvailable}</Text>
 
       {loading ? (
         <View style={styles.progressContainer}>
