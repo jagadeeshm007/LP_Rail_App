@@ -1,4 +1,5 @@
 import { Timestamp } from '@react-native-firebase/firestore';
+import PaymentMethods from '../src/app/(forms)/index';
 export const roles = {
     roles_1: 'Admin',
     roles_2: 'User',
@@ -40,6 +41,7 @@ export type UserProfile = {
     Recipts: string[];
     AccountantId: string;
     permitteby: permittebytype | null;
+    PaymentMethods : string | null | undefined;
   }
 
   export interface BankData {

@@ -136,11 +136,10 @@ const PaymentRequest = () => {
     }
 
     const bankData: BankData = {
-        accountNumber: accountnumber,
         ifsc: ifsc,
         ponumber: ponumber,
         vendorname: vendorname,
-        accountnumber: accountnumber,
+        accountNumber: accountnumber,
         timestamp: firestore.Timestamp.now(),
     };
 
@@ -164,6 +163,7 @@ const PaymentRequest = () => {
       Recipts: [],
       AccountantId: userProfile?.mappedAdminId || "",
       permitteby: null,
+      PaymentMethods: "Material and PO Payment",
     };
 
     try {

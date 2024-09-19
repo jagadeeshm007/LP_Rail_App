@@ -163,6 +163,7 @@ const General = () => {
       Recipts: [],
       AccountantId: userProfile?.mappedAdminId || "",
       permitteby: null,
+      PaymentMethods : "General",
     };
 
     try {

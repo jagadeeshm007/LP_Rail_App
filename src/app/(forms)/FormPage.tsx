@@ -126,6 +126,7 @@ const PaymentRequest = () => {
       Recipts: [],
       AccountantId: userProfile?.mappedAccountantId || "",
       permitteby: null,
+      PaymentMethods : "Site Expenditure",
     };
 
     try {
