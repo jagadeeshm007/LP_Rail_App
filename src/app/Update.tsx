@@ -9,6 +9,26 @@ import firestore from '@react-native-firebase/firestore';
 import { Stack } from 'expo-router';
 import * as Updates from "expo-updates";
 import Constants from 'expo-constants';
+import { startActivityAsync } from 'expo-intent-launcher';
+import { Linking } from 'react-native';
+
+// useEffect(() => {
+
+// Alert.alert(
+//   'Permission Required',
+//   'You need to allow this app to install APKs from unknown sources. Open settings?',
+//   [
+//     {
+//       text: 'Open Settings',
+//       onPress: () => Linking.openSettings(),
+//     },
+//     { text: 'Cancel', style: 'cancel' },
+//   ]
+// );
+
+// }
+// ,[]);
+// import * as IntentLauncher from 'expo-intent-launcher';
 
 const isDevelopment = Constants.manifest2?.extra?.expoGo?.developer ?? __DEV__;
 
@@ -83,15 +103,59 @@ const UpdateApp: React.FC = () => {
           {
             text: 'Open',
             onPress: async () => {
-              if (await Sharing.isAvailableAsync()) {
-                await Sharing.shareAsync(uri, {
-                  mimeType: 'application/vnd.android.package-archive', // MIME type for APK files
-                  dialogTitle: 'Open APK',
+              try {
+                const cUri = await FileSystem.getContentUriAsync(uri); // Await the content URI
+                console.log('Content URI:', cUri);
+            
+                await startActivityAsync('android.intent.action.INSTALL_PACKAGE', {
+                  data: cUri,
+                  flags: 1,
+                  type: 'application/vnd.android.package-archive', // Explicitly set the type for APK
                 });
-              } else {
-                Alert.alert('Error', 'File sharing is not available on this device.');
+            
+                console.log('APK opened successfully');
+              } catch (err) {
+                console.log('Error while opening APK:', err);
               }
             },
+            // onPress: async () => {
+              
+            //   try{
+
+            //     FileSystem.getContentUriAsync(uri).then(cUri => async () => {
+            //       console.log(cUri);
+            //       try{
+            //        const a = await startActivityAsync('android.intent.action.VIEW', {
+            //         data: cUri,
+            //         flags: 1,
+            //       });
+            //       console.log("success");
+            //     }
+            //     catch(err){
+            //       console.log("error",err);
+            //     }
+            //     console.log("done");
+            //     });
+
+
+            //     // await startActivityAsync("android.intent.action.INSTALL_PACKAGE", {
+            //     //   data: uri,
+            //     //   flags: 1,
+            //     // });
+            // }
+            // catch(err){
+            //   console.log("error",err);
+            // }
+
+            //   // if (await Sharing.isAvailableAsync()) {
+            //   //   await Sharing.shareAsync(uri, {
+            //   //     mimeType: 'application/vnd.android.package-archive', // MIME type for APK files
+            //   //     dialogTitle: 'Open APK',
+            //   //   });
+            //   // } else {
+            //   //   Alert.alert('Error', 'File sharing is not available on this device.');
+            //   // }
+            // },
           },
           { text: 'Cancel', style: 'cancel' },
         ]);
@@ -120,8 +184,8 @@ const UpdateApp: React.FC = () => {
       <Text style={styles.title}>Pay Bill</Text>
       <Text style={styles.text}>App Version {Application.nativeApplicationVersion}</Text>
       <Text style={styles.text}>Build Version {Application.nativeBuildVersion}</Text>
-      <Text style={styles.text}>Updates on {update.isAvailable}</Text>
-      
+      {/* <Text style={styles.text}>Updates on {update.isAvailable}</Text> */}
+
 
       {loading ? (
         <View style={styles.progressContainer}>
