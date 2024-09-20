@@ -8,6 +8,9 @@ import { useEffect } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { Stack } from 'expo-router';
 import * as Updates from "expo-updates";
+import Constants from 'expo-constants';
+
+const isDevelopment = Constants.manifest2?.extra?.expoGo?.developer ?? __DEV__;
 
 const UpdateApp: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -17,8 +20,10 @@ const UpdateApp: React.FC = () => {
 
   useEffect(() => {
     const checkForUpdate = async () => {
+      if(!isDevelopment){
       const update = await Updates.checkForUpdateAsync();
       setUpdate(update);
+      }
     };
     checkForUpdate();
   }, []);
@@ -29,13 +34,14 @@ const UpdateApp: React.FC = () => {
       const update = await firestore().collection('appUpdate').doc('latest').get();
       setData(update.data());
       if (update.data()?.version > currentVersion) {
+        console.log(JSON.stringify(update.data()));
         Alert.alert(
           'Update available',
           'A new version of the app is available. Do you want to download it?',
           [
             {
               text: 'Download',
-              onPress: downloadAndOpenFile,
+              onPress:()=> downloadAndOpenFile(update.data()?.apkUrl),
             },
             { text: 'Cancel', style: 'cancel' },
           ]
@@ -47,16 +53,16 @@ const UpdateApp: React.FC = () => {
     };
 
 
-  const downloadAndOpenFile = async () => {
+  const downloadAndOpenFile = async (apkUrl : string) => {
     setLoading(true);
-    const apkUrl = data?.url;
     // Use the document directory for Android as a fallback
     const fileUri = Platform.OS === 'android'
-      ? FileSystem.documentDirectory + 'app.apk'
-      : FileSystem.cacheDirectory + 'app.apk'; // For iOS, use cacheDirectory
+      ? FileSystem.documentDirectory + 'lprail.apk'
+      : FileSystem.cacheDirectory + 'lprail.apk'; // For iOS, use cacheDirectory
 
     try {
       // Create a download resumable instance to track progress
+      console.log('Downloading file to', apkUrl);
       const downloadResumable = FileSystem.createDownloadResumable(
         apkUrl,
         fileUri,
@@ -115,6 +121,7 @@ const UpdateApp: React.FC = () => {
       <Text style={styles.text}>App Version {Application.nativeApplicationVersion}</Text>
       <Text style={styles.text}>Build Version {Application.nativeBuildVersion}</Text>
       <Text style={styles.text}>Updates on {update.isAvailable}</Text>
+      
 
       {loading ? (
         <View style={styles.progressContainer}>

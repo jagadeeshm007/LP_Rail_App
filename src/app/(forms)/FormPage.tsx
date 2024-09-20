@@ -269,7 +269,7 @@ const PaymentRequest = () => {
         value={ponumber}
         onChangeText={setPonumber}
         style={[styles.input, errors.ponumber ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -287,7 +287,7 @@ const PaymentRequest = () => {
         value={ifsc}
         onChangeText={setIfsc}
         style={[styles.input, errors.ifsc ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -296,7 +296,7 @@ const PaymentRequest = () => {
         value={accountnumber}
         onChangeText={setAccountnumber}
         style={[styles.input, errors.accountnumber ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <DropDownPicker

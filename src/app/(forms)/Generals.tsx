@@ -161,7 +161,7 @@ const General = () => {
       BankId: "",
       development: (developmentId as string) || "",
       Recipts: [],
-      AccountantId: userProfile?.mappedAdminId || "",
+      AccountantId: userProfile?.mappedAccountantId || "",
       permitteby: null,
       PaymentMethods : "General",
     };

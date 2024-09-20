@@ -288,6 +288,7 @@ export default function DataProvider({ children }: PropsWithChildren<{}>) {
                 ...doc.data(),
               }));
               setRealTimeData(data);
+              // console.log("data", data);
               setIsLoading(false);
             },
             (error) => {

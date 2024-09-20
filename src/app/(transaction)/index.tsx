@@ -406,7 +406,7 @@ const Transaction: React.FC = () => {
   return (
     <TouchableWithoutFeedback style={{ flex: 1 }} onPress={closeMenu}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           <Stack.Screen
             options={{
               title: "Transaction",
@@ -854,7 +854,7 @@ const Transaction: React.FC = () => {
               ReciptsPickerHandler={() => ReciptsPicker()}
             />)}
             
-        </View>
+        </ScrollView>
         {loading && (
           <View style={styles.loadingOverlay}>
             <ActivityIndicator size="large" color="#fff" />
