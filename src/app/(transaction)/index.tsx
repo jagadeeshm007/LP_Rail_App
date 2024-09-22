@@ -48,6 +48,7 @@ const Transaction: React.FC = () => {
   const [status, setStatus] = useState<string>("");
   const [waiting, setWaiting] = useState(false);
   const [showDenyModal, setShowDenyModal] = useState(false);
+  const [setDenystatus, setDenyStatus] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
   const router = useRouter();
@@ -132,6 +133,7 @@ const Transaction: React.FC = () => {
           parsedData.development,
           "developmentData"
         );
+        console.log("bankdata", fbankdata);
         setBankData(fbankdata);
         setDevelopmentData(fdevelopmentdata);
       } catch (error) {
@@ -150,14 +152,14 @@ const Transaction: React.FC = () => {
     console.log("cause", cause);
     try {
       await postDocumentwithDoc("transactions", transactionData.id, {
-        status: Status.fail,
+        status: setDenystatus,
         rejectedcause: cause,
         permitteby: {
           id: userProfile?.email,
           name: userProfile?.name,
         },
       });
-      transactionData.rejectedcause = cause;
+      transactionData.rejectedcause = setDenystatus;
       Notify({
         transactionData: transactionData,
         statement: "Transaction Rejected",
@@ -230,7 +232,8 @@ const Transaction: React.FC = () => {
               setWaiting(false);
               return;
             }
-            if (newstatus === Status.fail) {
+            if (newstatus === Status.fail || newstatus === Status.qualityfail || newstatus === Status.Suspend) {
+              setDenyStatus(newstatus);
               setShowDenyModal(true);
               return;
             }
@@ -356,6 +359,7 @@ const Transaction: React.FC = () => {
       />
       {showDenyModal && (
         <DenyModal
+          status={setDenystatus}
           handleDenypress={(cause: string) => handleDenypress(cause)}
           handleDismiss={(dismiss: boolean) => setShowDenyModal(dismiss)}
         />
@@ -390,7 +394,7 @@ const StackProps = {
   headerTintColor: "#fff",
 };
 
-export default memo(Transaction);
+export default Transaction;
 
 const styles = StyleSheet.create({
   container: {

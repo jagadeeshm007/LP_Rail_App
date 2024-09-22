@@ -322,16 +322,16 @@ export default function DataProvider({ children }: PropsWithChildren<{}>) {
 
   //
 
-  const getToken = async () => {
-    try {
-      const token = await Messaging().getToken();
-      //console.log('Token:', token);---------------------------------------------------------------------------------->
-    } catch (error) {
-      console.log("Error while getting the token", error);
-    }
-  };
+  // const getToken = async () => {
+  //   try {
+  //     const token = await Messaging().getToken();
+  //     //console.log('Token:', token);---------------------------------------------------------------------------------->
+  //   } catch (error) {
+  //     console.log("Error while getting the token", error);
+  //   }
+  // };
 
-  getToken();
+  // getToken();
 
   if (isLoading) {
     return (

@@ -9,7 +9,7 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import DropDownPicker from "react-native-dropdown-picker";
 import ImagePickerComponent, {
@@ -39,8 +39,7 @@ const EditGeneral = () => {
   const [option, setoption] = useState<string | null>(null);
   const [options, setoptions] = useState<any[]>([
     { label: "Rent", value: "Rent" },
-    { label: "Business", value: "Business" },
-    { label: "Development", value: "Development" },
+    { label: "Business and Development", value: "Business and Development" }
   ]);
   const [optionsopen, setoptionsOpen] = useState<boolean>(false);
 
@@ -240,7 +239,7 @@ const EditGeneral = () => {
       await firestore()
         .collection("transactions")
         .doc(TransactionData?.id)
-        .set(transactionDatasnap);
+        .update(transactionDatasnap);
       notify(transactionDatasnap);
       resetForm();
       Alert.alert(
@@ -321,8 +320,16 @@ const EditGeneral = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Stack.Screen options={style} />
-
+      <ScrollView
+          style={styles.scrollcontainer}
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.scrollContent}
+        >
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={open}
         value={projectCode}
         items={projectCodes}
@@ -331,7 +338,13 @@ const EditGeneral = () => {
         placeholder="Project"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.projectCode ? styles.inputError : null]}
-        dropDownContainerStyle={[styles.dropdownContainer]}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={1000}
       />
 
@@ -345,6 +358,10 @@ const EditGeneral = () => {
       />
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={optionsopen}
         value={option}
         items={options}
@@ -353,11 +370,21 @@ const EditGeneral = () => {
         placeholder="Pay Type"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.option ? styles.inputError : null]}
-        dropDownContainerStyle={[styles.dropdownContainer]}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={1000}
       />
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={openItem}
         value={isOtherSelected ? "Other (Enter manually)" : itemName}
         items={StatementOptions}
@@ -375,8 +402,14 @@ const EditGeneral = () => {
         placeholder="Statement"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.itemName ? styles.inputError : null]}
-        dropDownContainerStyle={styles.dropdownContainer}
-        zIndex={openItem ? 999 : 2}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
+        zIndex={1000}
       />
       {isOtherSelected && (
         <TextInput
@@ -396,6 +429,9 @@ const EditGeneral = () => {
         ref={imagePickerRef}
         onImagesSelected={handleImagesSelected}
       />
+
+<View style={styles.bottomSpace} />
+</ScrollView>
 
       {!isKeyboardVisible && (
         <View style={styles.Buttons}>
@@ -436,6 +472,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#222",
     width: "100%",
   },
+  scrollcontainer: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#222",
+    width: "100%",
+  },
   input: {
     height: 50,
     borderColor: "#333",
@@ -451,6 +493,12 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: "#E53935",
+  },
+  scrollContent: {
+    paddingBottom: 100, // Or any desired value to add scrollable space at the bottom
+  },
+  bottomSpace: {
+    height: 100, // Adjust this value to create extra scrollable space
   },
   errorText: {
     color: "#E53935",
@@ -492,7 +540,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   Buttons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     justifyContent: "space-between",
     backgroundColor: "transparent",
     alignItems: "center",

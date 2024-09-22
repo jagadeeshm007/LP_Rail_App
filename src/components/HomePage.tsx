@@ -11,12 +11,20 @@ import Features from "./Features";
 import Form from "./Form";
 import { TransactionData } from "@/assets/Types";
 import {GreetingMessage} from "../utils/Getgreetings";
+import { Timestamp } from "@react-native-firebase/firestore";
 
 const Home: React.FunctionComponent = () => {
   const greeting = GreetingMessage();
   const { height } = Dimensions.get("window");
   const { userProfile, realTimeData } = useData();
   const data = realTimeData.length > 0 ? realTimeData.slice(0, 5) : [];
+
+  // Sort data by timestamp in chronological order (oldest to newest)
+  const sortedData = realTimeData
+    .slice(0, 5)
+    .sort((a: TransactionData, b: TransactionData) => new Timestamp(b.timestamp.seconds, b.timestamp.nanoseconds).toMillis() - new Timestamp(a.timestamp.seconds, a.timestamp.nanoseconds).toMillis()); // Sort by timestamp
+
+
   const sizeOfData = data.length;
   const renderItem = ({ item }: { item: TransactionData }) => (
     //console.log("home screen",item),
@@ -25,7 +33,7 @@ const Home: React.FunctionComponent = () => {
 
   return (
     <FlatList
-      data={data}
+      data={sortedData}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}

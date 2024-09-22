@@ -17,12 +17,16 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DropDownPicker from "react-native-dropdown-picker";
 import { roles, TransactionData,status } from "@/assets/Types";
 import { router, Stack } from "expo-router";
+import { Timestamp } from "@react-native-firebase/firestore";
 const History = () => {
   const { realTimeData } = useData();
+  const sortedData = realTimeData
+  .sort((a: TransactionData, b: TransactionData) => new Timestamp(b.timestamp.seconds, b.timestamp.nanoseconds).toMillis() - new Timestamp(a.timestamp.seconds, a.timestamp.nanoseconds).toMillis()); // Sort by timestamp
+
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<TransactionData[]>(realTimeData);
+  const [filteredData, setFilteredData] = useState<TransactionData[]>(sortedData);
   const [refreshing, setRefreshing] = useState(false);
-  const { userProfile,fetchCollection } = useData();
+  const { userProfile,fetchCollection,fetchDataByRole } = useData();
   const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
   const [projects, setProjects] = useState<string[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -65,6 +69,11 @@ const History = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (fetchDataByRole) {
+      fetchDataByRole();
+    }
+    const sortedData = realTimeData.sort((a: TransactionData, b: TransactionData) => new Timestamp(b.timestamp.seconds, b.timestamp.nanoseconds).toMillis() - new Timestamp(a.timestamp.seconds, a.timestamp.nanoseconds).toMillis()); // Sort by timestamp
+    setFilteredData(sortedData);
     setRefreshing(false);
   };
 

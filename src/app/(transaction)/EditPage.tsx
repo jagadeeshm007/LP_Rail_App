@@ -9,7 +9,7 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import DropDownPicker from "react-native-dropdown-picker";
 import ImagePickerComponent, {
@@ -18,11 +18,9 @@ import ImagePickerComponent, {
 import { useData } from "../../providers/DataProvider";
 import firestore from "@react-native-firebase/firestore";
 import { Stack,useLocalSearchParams, useRouter } from "expo-router";
-import sendPushNotification from "@/src/lib/notifications";
 import { TransactionData,BankData,status } from "@/assets/Types";
 import { uploadImage } from "@/src/utils/uploadImage";
 import { Notify } from "./helper/Notification";
-import Index from '../(auth)/index';
 const EditPaymentRequest = () => {
 
     // data hooks
@@ -54,6 +52,7 @@ const EditPaymentRequest = () => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [transactionData, setTransactionData] =
     useState<TransactionData | null>(null);
+  const [cloudImages, setcloudImages] = useState<string[]>([]);
   const router = useRouter();
 
   // set transaction data
@@ -70,8 +69,8 @@ const EditPaymentRequest = () => {
             setIfsc(BankData.ifsc);
             setPonumber(BankData.ponumber);
             setVendorname(BankData.vendorname);
-            setAccountnumber(BankData.accountnumber);
-            setImages(decodedData.urilinks);
+            setAccountnumber(BankData.accountNumber);
+            setcloudImages(decodedData.urilinks);
             let change:boolean = true;
         StatementOptions.map((statement) => {
           if (statement.value === decodedData.details) {
@@ -181,7 +180,6 @@ const EditPaymentRequest = () => {
     setImages([]);
     imagePickerRef.current?.clearSelectedImages();
   };
-
   const handleImagesSelected = (selectedImages: string[]) => {
     setImages(selectedImages);
   };
@@ -205,7 +203,7 @@ const EditPaymentRequest = () => {
       return;
     }
     const bankData: BankData = {
-        accountNumber: accountnumber || "", // fallback to an empty string if undefined
+      accountNumber: accountnumber , // fallback to an empty string if undefined
         ifsc: ifsc,
         ponumber: ponumber,
         vendorname: vendorname,
@@ -326,105 +324,146 @@ const EditPaymentRequest = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Stack.Screen options={style} />
+      <ScrollView
+          style={styles.scrollcontainer}
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <DropDownPicker
+            listMode="SCROLLVIEW"
+            scrollViewProps={{
+              nestedScrollEnabled: true,
+            }}
+            open={open}
+            value={projectCode}
+            items={projectCodes}
+            setOpen={setOpen}
+            setValue={setProjectCode}
+            placeholder="Project"
+            textStyle={{ color: "#fff" }}
+            style={[
+              styles.input,
+              errors.projectCode ? styles.inputError : null,
+            ]}
+            dropDownContainerStyle={[
+              styles.dropdownContainer,
+              {
+                position: "relative",
+                top: -10,
+              },
+            ]}
+            zIndex={1000}
+          />
 
-      <DropDownPicker
-        open={open}
-        value={projectCode}
-        items={projectCodes}
-        setOpen={setOpen}
-        setValue={setProjectCode}
-        placeholder="Project"
-        textStyle={{ color: "#fff" }}
-        style={[styles.input, errors.projectCode ? styles.inputError : null]}
-        dropDownContainerStyle={[styles.dropdownContainer]}
-        zIndex={1000}
-      />
+          <TextInput
+            placeholder="Amount"
+            placeholderTextColor="#fff"
+            value={amount}
+            onChangeText={setAmount}
+            style={[styles.input, errors.amount ? styles.inputError : null]}
+            keyboardType="numeric"
+          />
 
-      <TextInput
-        placeholder="Amount"
-        placeholderTextColor="#fff"
-        value={amount}
-        onChangeText={setAmount}
-        style={[styles.input, errors.amount ? styles.inputError : null]}
-        keyboardType="numeric"
-      />
+          <TextInput
+            placeholder="PO Number"
+            placeholderTextColor="#fff"
+            value={ponumber}
+            onChangeText={setPonumber}
+            style={[styles.input, errors.ponumber ? styles.inputError : null]}
+            keyboardType="default"
+          />
 
-      <TextInput
-        placeholder="PO Number"
-        placeholderTextColor="#fff"
-        value={ponumber}
-        onChangeText={setPonumber}
-        style={[styles.input, errors.ponumber ? styles.inputError : null]}
-        keyboardType="default"
-      />
+          <TextInput
+            placeholder="Vendor Name"
+            placeholderTextColor="#fff"
+            value={vendorname}
+            onChangeText={setVendorname}
+            style={[styles.input, errors.vendorname ? styles.inputError : null]}
+            keyboardType="default"
+          />
 
-      <TextInput
-        placeholder="Vendor Name"
-        placeholderTextColor="#fff"
-        value={vendorname}
-        onChangeText={setVendorname}
-        style={[styles.input, errors.vendorname ? styles.inputError : null]}
-        keyboardType="default"
-      />
+          <TextInput
+            placeholder="IFSC Code"
+            placeholderTextColor="#fff"
+            value={ifsc}
+            onChangeText={setIfsc}
+            style={[styles.input, errors.ifsc ? styles.inputError : null]}
+            keyboardType="default"
+          />
 
-      <TextInput
-        placeholder="IFSC Code"
-        placeholderTextColor="#fff"
-        value={ifsc}
-        onChangeText={setIfsc}
-        style={[styles.input, errors.ifsc ? styles.inputError : null]}
-        keyboardType="default"
-      />
+          <TextInput
+            placeholder="Account Number"
+            placeholderTextColor="#fff"
+            value={accountnumber}
+            onChangeText={setAccountnumber}
+            style={[
+              styles.input,
+              errors.accountnumber ? styles.inputError : null,
+            ]}
+            keyboardType="default"
+          />
 
-      <TextInput
-        placeholder="Account Number"
-        placeholderTextColor="#fff"
-        value={accountnumber}
-        onChangeText={setAccountnumber}
-        style={[styles.input, errors.accountnumber ? styles.inputError : null]}
-        keyboardType="default"
-      />
+          <DropDownPicker
+            listMode="SCROLLVIEW"
+            scrollViewProps={{
+              nestedScrollEnabled: true,
+            }}
+            open={openItem}
+            value={isOtherSelected ? "Other (Enter manually)" : itemName}
+            items={StatementOptions}
+            setOpen={setOpenItem}
+            setValue={(callback) => {
+              const value =
+                typeof callback === "function" ? callback(itemName) : callback;
+              if (value === "Other (Enter manually)") {
+                setIsOtherSelected(true);
+              } else {
+                setIsOtherSelected(false);
+                setItemName(value);
+              }
+            }}
+            placeholder="Material schedule No / Service Reason"
+            textStyle={{ color: "#fff" }}
+            style={[styles.input, errors.itemName ? styles.inputError : null]}
+            dropDownContainerStyle={[
+              styles.dropdownContainer,
+              {
+                position: "relative",
+                top: -10,
+              },
+            ]}
+            zIndex={1000}
+          />
 
-      <DropDownPicker
-        open={openItem}
-        value={isOtherSelected ? "Other (Enter manually)" : itemName}
-        items={StatementOptions}
-        setOpen={setOpenItem}
-        setValue={(callback) => {
-          const value =
-            typeof callback === "function" ? callback(itemName) : callback;
-          if (value === "Other (Enter manually)") {
-            setIsOtherSelected(true);
-          } else {
-            setIsOtherSelected(false);
-            setItemName(value);
-          }
-        }}
-        placeholder="Material schedule No / Service Reason"
-        textStyle={{ color: "#fff" }}
-        style={[styles.input, errors.itemName ? styles.inputError : null]}
-        dropDownContainerStyle={styles.dropdownContainer}
-        zIndex={openItem ? 999 : 2}
-      />
-      {isOtherSelected && (
-        <TextInput
-          placeholder="Enter custom statement"
-          placeholderTextColor="#fff"
-          value={customStatement}
-          onChangeText={setCustomStatement}
-          style={[styles.input]}
-        />
-      )}
+          {isOtherSelected && (
+            <TextInput
+              placeholder="Enter custom statement"
+              placeholderTextColor="#fff"
+              value={customStatement}
+              onChangeText={setCustomStatement}
+              style={[
+                styles.input,
+                errors.customStatement ? styles.inputError : null,
+              ]}
+            />
+          )}
 
-      <TouchableOpacity onPress={handlePickImages} style={styles.fileButton}>
-        <Text style={styles.fileButtonText}>Pick Files</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handlePickImages}
+            style={styles.fileButton}
+          >
+            <Text style={styles.fileButtonText}>Pick Files</Text>
+          </TouchableOpacity>
 
-      <ImagePickerComponent
-        ref={imagePickerRef}
-        onImagesSelected={handleImagesSelected}
-      />
+          <ImagePickerComponent
+            ref={imagePickerRef}
+            onImagesSelected={handleImagesSelected}
+          />
 
+          
+
+        <View style={styles.bottomSpace} />
+        </ScrollView>
       {!isKeyboardVisible && (
         <View style={styles.Buttons}>
             <TouchableOpacity
@@ -464,6 +503,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#222",
     width: "100%",
   },
+  scrollcontainer: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#222",
+    width: "100%",
+  },
   input: {
     height: 50,
     borderColor: "#333",
@@ -479,6 +524,12 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: "#E53935",
+  },
+  scrollContent: {
+    paddingBottom: 100, // Or any desired value to add scrollable space at the bottom
+  },
+  bottomSpace: {
+    height: 100, // Adjust this value to create extra scrollable space
   },
   errorText: {
     color: "#E53935",

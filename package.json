@@ -69,6 +69,7 @@
     "react-native": "0.74.5",
     "react-native-async-storage": "^0.0.1",
     "react-native-dropdown-picker": "^5.4.6",
+    "react-native-element-dropdown": "^2.12.1",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-image-resizer": "^1.4.5",
     "react-native-image-viewing": "^0.2.2",

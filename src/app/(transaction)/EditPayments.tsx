@@ -9,7 +9,7 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import DropDownPicker from "react-native-dropdown-picker";
 import ImagePickerComponent, {
@@ -21,11 +21,12 @@ import { Stack,useLocalSearchParams, useRouter } from "expo-router";
 import sendPushNotification from "@/src/lib/notifications";
 import { TransactionData,BankData,status } from "@/assets/Types";
 import { uploadImage } from "@/src/utils/uploadImage";
+import { Notify } from "./helper/Notification";
 const EditPaymentRequest = () => {
 
     // data hooks
     const { id } = useLocalSearchParams();
-  const { userProfile, postDocument, fetchCollection, fetchDocument } =
+  const { userProfile, postDocument, fetchCollection, fetchDocument ,postDocumentwithDoc} =
     useData();
 
   // form state
@@ -66,7 +67,7 @@ const EditPaymentRequest = () => {
             setIfsc(BankData.ifsc);
             setPonumber(BankData.ponumber);
             setVendorname(BankData.vendorname);
-            setAccountnumber(BankData.accountnumber);
+            setAccountnumber(BankData.accountNumber);
             setImages(decodedData.urilinks);
             let change:boolean = true;
         StatementOptions.map((statement) => {
@@ -155,8 +156,8 @@ const EditPaymentRequest = () => {
     if (!vendorname) newErrors.vendorname = "Vendor Name is required";
     if (!ifsc) newErrors.ifsc = "IFSC Code is required";
     if (!accountnumber) newErrors.accountnumber = "Account Number is required";
-    if (isOtherSelected && !customStatement)
-      newErrors.customStatement = "Custom statement is required";
+    // if (isOtherSelected && !customStatement)
+    //   newErrors.customStatement = "Custom statement is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -184,8 +185,12 @@ const EditPaymentRequest = () => {
   };
 
   const handleSubmit = async () => {
-
-    if (!validateForm()) return;
+    // console.log("Submitting form data");
+    if (!validateForm()) {
+      console.log("Form is invalid");
+      return;
+    }
+    // console.log("Form is valid");
 
     setLoading(true);
 
@@ -198,7 +203,7 @@ const EditPaymentRequest = () => {
       alert("Failed to upload images. Please try again.");
       return;
     }
-
+    console.log("new account number", accountnumber);
     const bankData: BankData = {
         accountNumber: accountnumber,
         ifsc: ifsc,
@@ -206,34 +211,41 @@ const EditPaymentRequest = () => {
         vendorname: vendorname,
         timestamp: firestore.Timestamp.now(),
     };
-
-    await firestore().collection("BankDetails").doc(transactionData?.BankId).set(bankData);
-
-    const transactionDatasnap: TransactionData = {
-      amount,
-      details: itemName,
-      editedtime: firestore.Timestamp.now(),
-      projectId: projectCode!,
-      receiverId: transactionData?.receiverId || "",
-      rejectedcause: "NULL",
-      senderId: transactionData?.senderId || "",
-      senderName: transactionData?.senderName || "",
-      status: status.inital,
-      timestamp: transactionData?.timestamp || firestore.Timestamp.now(),
-      urilinks: successfulUploads,
-      AccountantUri: [],
-      BankId: transactionData?.BankId || "",
-      development: transactionData?.development || "",
-      id: transactionData?.id || "",
-      Recipts: transactionData?.Recipts || [],
-      AccountantId: transactionData?.AccountantId || "",
-      permitteby: transactionData?.permitteby || null,
-      PaymentMethods: transactionData?.PaymentMethods || "",
-    };
+    if(transactionData?.BankId){
+      await postDocumentwithDoc("BankDetails", transactionData?.BankId,bankData);
+      }else {
+        console.log("Bank details not updated");
+      }
+      const transactionDatasnap: TransactionData = {
+        amount: amount || "", // fallback to an empty string if undefined
+        details: itemName || "",
+        editedtime: firestore.Timestamp.now(),
+        projectId: projectCode || "",
+        receiverId: transactionData?.receiverId || "",
+        rejectedcause: "NULL",
+        senderId: transactionData?.senderId || "",
+        senderName: transactionData?.senderName || "",
+        status: status.inital,
+        timestamp: transactionData?.timestamp || firestore.Timestamp.now(),
+        urilinks: successfulUploads || [],
+        AccountantUri: transactionData?.AccountantUri || [],
+        BankId: transactionData?.BankId || "",
+        development: transactionData?.development || "",
+        id: transactionData?.id || "",
+        Recipts: transactionData?.Recipts || [],
+        AccountantId: transactionData?.AccountantId || "",
+        permitteby: transactionData?.permitteby || null, // explicitly set null if undefined
+        PaymentMethods: transactionData?.PaymentMethods || "",
+      };
 
     try {
       await firestore().collection("transactions").doc(transactionData?.id).set(transactionDatasnap);
-      notify(transactionDatasnap);
+      Notify({
+        transactionData: transactionDatasnap,
+        statement: "Edited Payment Request",
+        sendTo:[ transactionData?.senderId || "", transactionData?.AccountantId || "", transactionData?.receiverId || ""],
+        fetchDocument: fetchDocument,
+      });
       resetForm();
       Alert.alert("Successfully updated!", "Your payment request has been successfully updated.",
         [
@@ -312,8 +324,17 @@ const EditPaymentRequest = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Stack.Screen options={style} />
+      <ScrollView
+          style={styles.scrollcontainer}
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.scrollContent}
+        >
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={open}
         value={projectCode}
         items={projectCodes}
@@ -322,7 +343,13 @@ const EditPaymentRequest = () => {
         placeholder="Project"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.projectCode ? styles.inputError : null]}
-        dropDownContainerStyle={[styles.dropdownContainer]}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={1000}
       />
 
@@ -372,6 +399,10 @@ const EditPaymentRequest = () => {
       />
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={openItem}
         value={isOtherSelected ? "Other (Enter manually)" : itemName}
         items={StatementOptions}
@@ -389,7 +420,13 @@ const EditPaymentRequest = () => {
         placeholder="Remark"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.itemName ? styles.inputError : null]}
-        dropDownContainerStyle={styles.dropdownContainer}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={openItem ? 999 : 2}
       />
       {isOtherSelected && (
@@ -411,6 +448,8 @@ const EditPaymentRequest = () => {
         onImagesSelected={handleImagesSelected}
       />
 
+<View style={styles.bottomSpace} />
+      </ScrollView>
       {!isKeyboardVisible && (
         <View style={styles.Buttons}>
             <TouchableOpacity
@@ -450,6 +489,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#222",
     width: "100%",
   },
+  scrollcontainer: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#222",
+    width: "100%",
+  },
   input: {
     height: 50,
     borderColor: "#333",
@@ -465,6 +510,12 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: "#E53935",
+  },
+  scrollContent: {
+    paddingBottom: 100, // Or any desired value to add scrollable space at the bottom
+  },
+  bottomSpace: {
+    height: 100, // Adjust this value to create extra scrollable space
   },
   errorText: {
     color: "#E53935",

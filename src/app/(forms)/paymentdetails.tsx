@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Keyboard,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import DropDownPicker from "react-native-dropdown-picker";
 import ImagePickerComponent, {
@@ -79,8 +79,8 @@ const PaymentRequest = () => {
     if (!vendorname) newErrors.vendorname = "Vendor Name is required";
     if (!ifsc) newErrors.ifsc = "IFSC Code is required";
     if (!accountnumber) newErrors.accountnumber = "Account Number is required";
-    if (isOtherSelected && !customStatement)
-      newErrors.customStatement = "Custom statement is required";
+    // if (isOtherSelected && !customStatement)
+    //   newErrors.customStatement = "Custom statement is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -240,8 +240,17 @@ const PaymentRequest = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Stack.Screen options={style} />
-
+      <View style={styles.innerContainer}>
+        <ScrollView
+          style={styles.scrollcontainer}
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.scrollContent}
+        >
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={open}
         value={projectCode}
         items={projectCodes}
@@ -250,7 +259,13 @@ const PaymentRequest = () => {
         placeholder="Project"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.projectCode ? styles.inputError : null]}
-        dropDownContainerStyle={[styles.dropdownContainer]}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={1000}
       />
 
@@ -300,6 +315,10 @@ const PaymentRequest = () => {
       />
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={openItem}
         value={isOtherSelected ? "Other (Enter manually)" : itemName}
         items={StatementOptions}
@@ -317,9 +336,16 @@ const PaymentRequest = () => {
         placeholder="Remark"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.itemName ? styles.inputError : null]}
-        dropDownContainerStyle={styles.dropdownContainer}
-        zIndex={openItem ? 999 : 2}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
+        zIndex={1000}
       />
+
       {isOtherSelected && (
         <TextInput
           placeholder="Enter custom statement"
@@ -338,6 +364,9 @@ const PaymentRequest = () => {
         ref={imagePickerRef}
         onImagesSelected={handleImagesSelected}
       />
+      
+      <View style={styles.bottomSpace} />
+      </ScrollView>
 
       {!isKeyboardVisible && (
         <TouchableOpacity
@@ -349,6 +378,7 @@ const PaymentRequest = () => {
         </TouchableOpacity>
       )}
 
+      </View>
       {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#fff" />
@@ -364,6 +394,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "#222",
+    width: "100%",
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  scrollcontainer: {
+    flex: 1,
     padding: 10,
     backgroundColor: "#222",
     width: "100%",
@@ -414,15 +454,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   submitButton: {
-    backgroundColor: "#1E3A8A",
-    borderRadius: 10,
-    alignItems: "center",
-    width: "100%",
     position: "absolute",
-    bottom: 20,
-    alignContent: "center",
+    bottom: 30,
+    left: 0,
+    right: 0,
+    marginHorizontal: 16,
+    backgroundColor: "#1e90ff",
+    paddingVertical: 15,
+    borderRadius: 10,
     justifyContent: "center",
-    padding: 15,
+    alignItems: "center",
   },
   submitButtonText: {
     color: "#FFF",
@@ -435,6 +476,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     zIndex: 1000,
+  },
+  scrollContent: {
+    paddingBottom: 100, // Or any desired value to add scrollable space at the bottom
+  },
+  bottomSpace: {
+    height: 100, // Adjust this value to create extra scrollable space
   },
 });
 

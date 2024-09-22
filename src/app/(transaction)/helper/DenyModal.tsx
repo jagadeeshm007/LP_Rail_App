@@ -4,13 +4,15 @@ import { Button, Modal } from "react-native-paper";
 import { TextInput, Text } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { useData } from "@/src/providers/DataProvider";
+import { status } from '../../../../assets/Types';
 
 interface DenyModalProps {
   handleDenypress: (cause: string) => void;
   handleDismiss: (dismiss: boolean) => void;
+  status: string;
 }
 
-const DenyModal: React.FC<DenyModalProps> = ({ handleDenypress,handleDismiss }) => {
+const DenyModal: React.FC<DenyModalProps> = ({ handleDenypress,handleDismiss,status }) => {
   const { fetchCollection } = useData();
   const [showInput, setShowInput] = useState(true);
   const [openItem, setOpenItem] = useState(false);

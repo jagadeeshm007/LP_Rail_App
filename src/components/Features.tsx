@@ -21,6 +21,7 @@ const Features = () => {
   const startRotation = async () => {
     if (refreshing) return; // Prevent double refresh
     if (!fetchDataByRole) {
+      
       console.error("fetchDataByRole is not defined");
       return; // Exit the function if fetchDataByRole is undefined
     }

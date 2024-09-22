@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Keyboard,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import DropDownPicker from "react-native-dropdown-picker";
 import ImagePickerComponent, {
@@ -36,8 +36,7 @@ const General = () => {
   const [option, setoption] = useState<string | null>(null);
   const [options, setoptions] = useState<any[]>([
     { label: "Rent", value: "Rent" },
-    { label: "Business", value: "Business" },
-    { label: "Development", value: "Development" },
+    { label: "Business and Development", value: "Business and Development" },
   ]);
   const [optionsopen, setoptionsOpen] = useState<boolean>(false);
 
@@ -239,8 +238,18 @@ const General = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Stack.Screen options={style} />
+      <View style={styles.innerContainer}>
+        <ScrollView
+          style={styles.scrollcontainer}
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.scrollContent}
+        >
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={open}
         value={projectCode}
         items={projectCodes}
@@ -249,7 +258,13 @@ const General = () => {
         placeholder="Project"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.projectCode ? styles.inputError : null]}
-        dropDownContainerStyle={[styles.dropdownContainer]}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={1000}
       />
 
@@ -263,6 +278,10 @@ const General = () => {
       />
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={optionsopen}
         value={option}
         items={options}
@@ -272,11 +291,21 @@ const General = () => {
         placeholder="Pay Type"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.option ? styles.inputError : null]}
-        dropDownContainerStyle={[styles.dropdownContainer]}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={1000}
       />
 
       <DropDownPicker
+      listMode="SCROLLVIEW"
+      scrollViewProps={{
+        nestedScrollEnabled: true,
+      }}
         open={openItem}
         value={isOtherSelected ? "Other (Enter manually)" : itemName}
         items={StatementOptions}
@@ -294,7 +323,13 @@ const General = () => {
         placeholder="Statement"
         textStyle={{ color: "#fff" }}
         style={[styles.input, errors.itemName ? styles.inputError : null]}
-        dropDownContainerStyle={styles.dropdownContainer}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          {
+            position: "relative",
+            top: -10,
+          },
+        ]}
         zIndex={openItem ? 999 : 2}
       />
       {isOtherSelected && (
@@ -316,6 +351,8 @@ const General = () => {
         onImagesSelected={handleImagesSelected}
       />
 
+<View style={styles.bottomSpace} />
+        </ScrollView>
       {!isKeyboardVisible && (
         <TouchableOpacity
           onPress={handleSubmit}
@@ -326,6 +363,7 @@ const General = () => {
         </TouchableOpacity>
       )}
 
+</View>
       {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#fff" />
@@ -341,6 +379,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "#222",
+    width: "100%",
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  scrollcontainer: {
+    flex: 1,
     padding: 10,
     backgroundColor: "#222",
     width: "100%",
@@ -391,15 +439,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   submitButton: {
-    backgroundColor: "#1E3A8A",
-    borderRadius: 10,
-    alignItems: "center",
-    width: "100%",
     position: "absolute",
-    bottom: 20,
-    alignContent: "center",
+    bottom: 30,
+    left: 0,
+    right: 0,
+    marginHorizontal: 16,
+    backgroundColor: "#1e90ff",
+    paddingVertical: 15,
+    borderRadius: 10,
     justifyContent: "center",
-    padding: 15,
+    alignItems: "center",
   },
   submitButtonText: {
     color: "#FFF",
@@ -412,6 +461,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     zIndex: 1000,
+  },
+  scrollContent: {
+    paddingBottom: 100, // Or any desired value to add scrollable space at the bottom
+  },
+  bottomSpace: {
+    height: 100, // Adjust this value to create extra scrollable space
   },
 });
 

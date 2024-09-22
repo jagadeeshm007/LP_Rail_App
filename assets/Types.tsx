@@ -55,7 +55,7 @@ export type UserProfile = {
     senderId: string;
     senderName: string;
     status: string;
-    timestamp: Timestamp | undefined;
+    timestamp: Timestamp ;
     urilinks: string[];
     AccountantUri: string[];
     BankId: string;
