@@ -306,6 +306,7 @@ const Transaction: React.FC = () => {
           }}
         >
           <Text style={styles.title}>{transactionData.PaymentMethods}</Text>
+          {userProfile?.email === transactionData.senderId && (
           <TouchableOpacity
             onPress={() =>
               transactionData.PaymentMethods &&
@@ -317,7 +318,7 @@ const Transaction: React.FC = () => {
               size={24}
               color="white"
             />
-          </TouchableOpacity>
+          </TouchableOpacity>)}
         </View>
 
         <PaymentSlip transactionData={transactionData} status={status} />
