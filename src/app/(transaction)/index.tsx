@@ -192,7 +192,7 @@ const Transaction: React.FC = () => {
       setWaiting(false);
       return;
     } else if (newstatus === Status.phase4) {
-      setWaiting(true);
+      // setWaiting(true);
       await postDocumentwithDoc("transactions", transactionData.id, {
         status: newstatus,
       });
@@ -235,7 +235,9 @@ const Transaction: React.FC = () => {
             if (newstatus === Status.fail || newstatus === Status.qualityfail || newstatus === Status.Suspend) {
               setDenyStatus(newstatus);
               setShowDenyModal(true);
+              setWaiting(false);
               return;
+        
             }
             let payload = {};
             if (
