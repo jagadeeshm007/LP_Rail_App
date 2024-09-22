@@ -1,52 +1,61 @@
 // src/components/AdminActions.tsx
-import React from 'react';
-import { View, Button, StyleSheet } from 'react-native';
-import { Button as PaperButton } from 'react-native-paper';
-import { useData } from '@/src/providers/DataProvider';
-import { roles } from '@/assets/Types';
+import React from "react";
+import { View, Button, StyleSheet } from "react-native";
+import { Button as PaperButton } from "react-native-paper";
+import { useData } from "@/src/providers/DataProvider";
+import { roles } from "@/assets/Types";
+import { status as Status } from "@/assets/Types";
 
 interface AdminActionsProps {
   status: string;
-  handleUpdateStatus: (newStatus: string) => void;
-  handleDeny: () => void;
-  handleEdit: () => void;
+  handleStateChange: (newstatus: string) => void;
 }
 
-const AdminActions: React.FC<AdminActionsProps> = ({ status, handleUpdateStatus, handleDeny,handleEdit }) => {
+const AdminActions: React.FC<AdminActionsProps> = ({status,handleStateChange}) => {
   const { userProfile } = useData();
+  if (
+    userProfile?.role !== roles.roles_1 &&
+    userProfile?.role !== roles.roles_4
+  )
+    return null;
 
-  if (userProfile?.role === roles.roles_1 || userProfile?.role === roles.roles_4 ) {
   return (
-    <View style={styles.actionContainer}>
-      {status === 'Pending' && (
+    <View style={styles.Container}>
+      {Status.inital === status && (
         <View style={styles.buttonContainer}>
-          <View style={styles.buttonWrapper}>
-            <PaperButton
-              mode="contained"
-              onPress={() => handleUpdateStatus('Accepted')}
-              style={styles.button}
-              labelStyle={styles.buttonLabel}
-            >
-              Accept
-            </PaperButton>
-          </View>
-          <View style={styles.buttonWrapper}>
-            <PaperButton
-              mode="contained"
-              onPress={() => handleDeny()}
-              style={styles.buttonDeny}
-              labelStyle={styles.buttonLabel}
-            >
-              Deny
-            </PaperButton>
-          </View>
+          <PaperButton
+            mode="contained"
+            onPress={() => handleStateChange(Status.phase1)}
+            style={[
+              styles.button,
+              {
+                backgroundColor: "#4CAF50",
+              },
+            ]}
+            labelStyle={styles.buttonLabel}
+          >
+            Accept
+          </PaperButton>
+          <PaperButton
+            mode="contained"
+            onPress={() => handleStateChange(Status.fail)}
+            style={[
+              styles.button,
+              {
+                backgroundColor: "#F44336",
+              },
+            ]}
+            labelStyle={styles.buttonLabel}
+          >
+            Deny
+          </PaperButton>
         </View>
       )}
-      {status === 'Denied' && (
+      {status === Status.phase1  && (
         <PaperButton
           mode="contained"
-          onPress={() => handleEdit()}
-          style={styles.buttonUpdate}
+          onPress={() => handleStateChange(Status.inital)}
+          style={[styles.button, { backgroundColor: "#FFC107",marginHorizontal:100 }]}
           labelStyle={styles.buttonLabel}
         >
           Edit Status
@@ -54,49 +63,35 @@ const AdminActions: React.FC<AdminActionsProps> = ({ status, handleUpdateStatus,
       )}
     </View>
   );
-}
-return null;
 };
 
 const styles = StyleSheet.create({
-  actionContainer: {
-    position: 'absolute',
+  Container: {
+    position: "absolute",
     bottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    width: "100%",
     borderRadius: 10,
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 5,
-  },
-  buttonWrapper: {
-    flex: 1,
-    paddingHorizontal: 5,
-    marginHorizontal: 1,
-    borderRadius: 10,
+    margin: 5,
   },
   button: {
-    backgroundColor: '#4CAF50',
     borderRadius: 10,
-  },
-  buttonDeny: {
-    backgroundColor: '#F44336',
-    borderRadius: 10,
-  },
-  buttonUpdate: {
-    marginTop: 10,
-    backgroundColor: '#FFC107',
-    borderRadius: 10,
+    flex: 1,
+    paddingHorizontal: 5,
+    marginHorizontal: 5,
   },
   buttonLabel: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });

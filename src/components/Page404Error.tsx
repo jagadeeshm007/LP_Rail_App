@@ -1,14 +1,17 @@
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { View, Text,StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 
 const Page404Error = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.Text}>Bad Internet Connection( or 404 Error)</Text>
+      <Text style={styles.Text}>Bad Internet Connection ( or 404 Error)</Text>
       <Button
         mode="contained"
-        onPress={() => router.replace("/(tabs)/")}
+        onPress={() => {
+          router.dismissAll();
+          router.push("/(tabs)/")
+        }}
         style={styles.button}
         labelStyle={styles.buttonLabel}
       >
@@ -28,14 +31,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#222'
   },
   Text: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#fff",
   },
   button: {
     marginTop: 16,
-    padding: 8,
+    height: 50,
     backgroundColor: "#cf9033",
+    justifyContent: "center",
+    alignItems: "center",
+    
   },
   buttonLabel: {
     fontSize: 16,

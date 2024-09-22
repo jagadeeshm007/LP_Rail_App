@@ -7,6 +7,28 @@ export const roles = {
     roles_4: 'SuperAdmin',
 };
 
+export const status = {
+  inital:"Submitted",
+  phase1:"Approved",
+  phase2:"Uploaded to Bank",
+  phase3:"Payment done,Awaiting for Bills",
+  phase4:"Bills Quality Hold",
+  final:"Bills Accepted",
+  fail:"Denied",
+  qualityfail:"Bills Quality failed",
+  Suspend : "Suspended",
+};
+
+export const statusColors = {
+  initial: "#A9A9A9", // Submitted
+  phase1: "#4CAF50",  // Approved
+  phase2: "#2196F3",  // Uploaded to bank
+  phase3: "#FF9800",  // Payment done, awaiting bills
+  phase4: "#FF9800",  // Bills quality hold
+  final: "#192A56",   // Bills accepted
+};
+
+
 
 export type UserProfile = {
     name: string;

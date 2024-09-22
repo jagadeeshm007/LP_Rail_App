@@ -15,7 +15,7 @@ import { useData } from "@/src/providers/DataProvider";
 import { Searchbar } from "react-native-paper";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DropDownPicker from "react-native-dropdown-picker";
-import { roles, TransactionData } from "@/assets/Types";
+import { roles, TransactionData,status } from "@/assets/Types";
 import { router, Stack } from "expo-router";
 const History = () => {
   const { realTimeData } = useData();
@@ -93,7 +93,7 @@ const History = () => {
             onPress={() => router.push("/Pending")}
             style={Styles.headblock}
           >
-            <Text style={{ color: "#eee", fontFamily: "bold" }}>Pending</Text>
+            <Text style={{ color: "#eee", fontFamily: "bold" }}>{status.inital}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => router.push("/Others")}

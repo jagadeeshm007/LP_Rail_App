@@ -19,13 +19,15 @@ import { useData } from "../../providers/DataProvider";
 import firestore from "@react-native-firebase/firestore";
 import { Stack,useLocalSearchParams, useRouter } from "expo-router";
 import sendPushNotification from "@/src/lib/notifications";
-import { TransactionData,BankData } from "@/assets/Types";
+import { TransactionData,BankData,status } from "@/assets/Types";
 import { uploadImage } from "@/src/utils/uploadImage";
+import { Notify } from "./helper/Notification";
+import Index from '../(auth)/index';
 const EditPaymentRequest = () => {
 
     // data hooks
     const { id } = useLocalSearchParams();
-  const { userProfile, postDocument, fetchCollection, fetchDocument } =
+  const { userProfile, postDocument, fetchCollection,postDocumentwithDoc, fetchDocument } =
     useData();
 
   // form state
@@ -48,6 +50,7 @@ const EditPaymentRequest = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isOtherSelected, setIsOtherSelected] = useState<boolean>(false);
   const [customStatement, setCustomStatement] = useState<string>("");
+  const [bankid, setBankId] = useState<string |null>(null);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [transactionData, setTransactionData] =
     useState<TransactionData | null>(null);
@@ -61,6 +64,7 @@ const EditPaymentRequest = () => {
             const decodedData = JSON.parse(decodeURIComponent(id.toString()));
             const BankData = await fetchDocument("BankDetails", decodedData.BankId);
             setTransactionData(decodedData);
+            // setBankId(decodedData.BankId);
             setAmount(decodedData.amount);
             setProjectCode(decodedData.projectId);
             setIfsc(BankData.ifsc);
@@ -100,24 +104,25 @@ const EditPaymentRequest = () => {
   // refs
   const imagePickerRef = useRef<ImagePickerComponentRef>(null);
 
-  // helpers and effects for form operations and validations 
-  const notify = async (transactionData: TransactionData) => {
-    console.log("Transaction Data", transactionData);
-    if (userProfile?.mappedAdminId) {
-      console.log("User Profile", userProfile.mappedAdminId);
-      const tokens = await fetchDocument("Tokens", userProfile.mappedAdminId);
-      const sessions = tokens.sessions;
-      console.log("Tokens", tokens.sessions);
-      if (sessions.length > 0) {
-        sessions.map((session: string, index: string) => {
-          sendPushNotification(session, "Payment Request","A Updated Request", transactionData);
-          console.log("Notification sent to", session);
-        });
-      }
-    }
-  };
+  // // helpers and effects for form operations and validations 
+  // const notify = async (transactionData: TransactionData) => {
+  //   console.log("Transaction Data", transactionData);
+  //   if (userProfile?.mappedAdminId) {
+  //     console.log("User Profile", userProfile.mappedAdminId);
+  //     const tokens = await fetchDocument("Tokens", userProfile.mappedAdminId);
+  //     const sessions = tokens.sessions;
+  //     console.log("Tokens", tokens.sessions);
+  //     if (sessions.length > 0) {
+  //       sessions.map((session: string, index: string) => {
+  //         sendPushNotification(session, "Payment Request","A Updated Request", transactionData);
+  //         console.log("Notification sent to", session);
+  //       });
+  //     }
+  //   }
+  // };
 
   const deleteDocument = async () => {
+    setLoading(true);
     try {
       await firestore().collection("BankDetails").doc(transactionData?.BankId).delete();
       await firestore()
@@ -134,6 +139,7 @@ const EditPaymentRequest = () => {
             text: "OK",
             onPress: () => {
               // Use router.replace here
+              setLoading(false);
               console.log("redirecting to tabs page");
               router.replace("/(tabs)");
             },
@@ -144,6 +150,7 @@ const EditPaymentRequest = () => {
       console.error("Error deleting document: ", error);
       Alert.alert("Failed to delete document");
     }
+    setLoading(false);
   };
 
   const validateForm = (): boolean => {
@@ -182,11 +189,10 @@ const EditPaymentRequest = () => {
   const handlePickImages = () => {
     imagePickerRef.current?.pickImages();
   };
+// ------------------------------------------------------------------------------------------------ handle submit
 
   const handleSubmit = async () => {
-
     if (!validateForm()) return;
-
     setLoading(true);
 
     const uploadedImages = await Promise.all(images.map(uploadImage));
@@ -198,42 +204,50 @@ const EditPaymentRequest = () => {
       alert("Failed to upload images. Please try again.");
       return;
     }
-
     const bankData: BankData = {
-        accountNumber: accountnumber,
+        accountNumber: accountnumber || "", // fallback to an empty string if undefined
         ifsc: ifsc,
         ponumber: ponumber,
         vendorname: vendorname,
         timestamp: firestore.Timestamp.now(),
     };
-
-    await firestore().collection("BankDetails").doc(transactionData?.BankId).set(bankData);
-
+    if(transactionData?.BankId){
+    await postDocumentwithDoc("BankDetails", transactionData?.BankId,bankData);
+    }else {
+      console.log("Bank details not updated");
+    }
     const transactionDatasnap: TransactionData = {
-      amount,
-      details: itemName,
+      amount: amount || "", // fallback to an empty string if undefined
+      details: itemName || "",
       editedtime: firestore.Timestamp.now(),
-      projectId: projectCode!,
+      projectId: projectCode || "",
       receiverId: transactionData?.receiverId || "",
       rejectedcause: "NULL",
       senderId: transactionData?.senderId || "",
       senderName: transactionData?.senderName || "",
-      status: "Pending",
+      status: status.inital,
       timestamp: transactionData?.timestamp || firestore.Timestamp.now(),
-      urilinks: successfulUploads,
-      AccountantUri: [],
+      urilinks: successfulUploads || [],
+      AccountantUri: transactionData?.AccountantUri || [],
       BankId: transactionData?.BankId || "",
       development: transactionData?.development || "",
       id: transactionData?.id || "",
       Recipts: transactionData?.Recipts || [],
       AccountantId: transactionData?.AccountantId || "",
-      permitteby: transactionData?.permitteby || null,
+      permitteby: transactionData?.permitteby || null, // explicitly set null if undefined
       PaymentMethods: transactionData?.PaymentMethods || "",
     };
-
+    
     try {
       await firestore().collection("transactions").doc(transactionData?.id).set(transactionDatasnap);
-      notify(transactionDatasnap);
+      console.log("Transaction data updated successfully");
+      Notify({
+        transactionData: transactionDatasnap,
+        statement: "Edited Payment Request",
+        sendTo:[ transactionData?.senderId || "", transactionData?.AccountantId || "", transactionData?.receiverId || ""],
+        fetchDocument: fetchDocument,
+      });
+      console.log("Notification sent successfully");
       resetForm();
       Alert.alert("Successfully updated!", "Your payment request has been successfully updated.",
         [
@@ -341,7 +355,7 @@ const EditPaymentRequest = () => {
         value={ponumber}
         onChangeText={setPonumber}
         style={[styles.input, errors.ponumber ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -350,7 +364,7 @@ const EditPaymentRequest = () => {
         value={vendorname}
         onChangeText={setVendorname}
         style={[styles.input, errors.vendorname ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -359,7 +373,7 @@ const EditPaymentRequest = () => {
         value={ifsc}
         onChangeText={setIfsc}
         style={[styles.input, errors.ifsc ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -368,7 +382,7 @@ const EditPaymentRequest = () => {
         value={accountnumber}
         onChangeText={setAccountnumber}
         style={[styles.input, errors.accountnumber ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <DropDownPicker

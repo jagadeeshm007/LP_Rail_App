@@ -3,11 +3,10 @@ import { Text, View, Dimensions, StyleSheet } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
-import { TransactionData } from "@/assets/Types";
+import { TransactionData, status as Status } from "@/assets/Types";
 import { Timestamp } from "@react-native-firebase/firestore";
 import { getStatusColor } from "@/src/utils/TransactionStatus";
 const width = Dimensions.get("window").width;
-
 
 interface TransactionElementProps {
   data: TransactionData;
@@ -20,21 +19,20 @@ const TransactionElement: React.FC<TransactionElementProps> = ({
 }) => {
   const router = useRouter();
 
-
   const formatDate = (date: Date): string => {
-    const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const year = String(date.getFullYear()).slice(-2); // Get last two digits of the year
-  const hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  const formattedHours = String(hours % 12 || 12).padStart(2, '0'); // Convert to 12-hour format and pad with zero if needed
-  return `${day}/${month}/${year} ${formattedHours}:${minutes}:${seconds} ${ampm}`;
-};
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const year = String(date.getFullYear()).slice(-2); // Get last two digits of the year
+    const hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = String(hours % 12 || 12).padStart(2, "0"); // Convert to 12-hour format and pad with zero if needed
+    return `${day}/${month}/${year} ${formattedHours}:${minutes}:${seconds} ${ampm}`;
+  };
 
   const handlePress = () => {
-    const id = encodeURIComponent(JSON.stringify(data));
+    const id = JSON.stringify(data);
     router.push(`/(transaction)?id=${id}`);
   };
 
@@ -45,25 +43,49 @@ const TransactionElement: React.FC<TransactionElementProps> = ({
     return formatDate(date);
   };
 
-  const ago = firestoreTimestampToDate(data.timestamp);
+  const ago = data.timestamp ? firestoreTimestampToDate(data.timestamp) : "---";
+
+  const Statustrim = (status: string) => {
+    if (status === Status.inital) {
+      return "Submitted";
+    } else if (status === Status.phase1) {
+      return "Approved";
+    } else if (status === Status.phase2) {
+      return "Uploaded";
+    } else if (status === Status.phase3) {
+      return "Awaiting";
+    } else if (status === Status.phase4) {
+      return "onHold";
+    } else if (status === Status.final) {
+      return "Accepted";
+    } else if (status === Status.fail) {
+      return "Denied";
+    } else if (status === Status.qualityfail) {
+      return "Failed";
+    } else if (status === Status.Suspend) {
+      return "Suspended";
+    }
+    else {
+      return "Unknown";
+    }
+  };
 
   return (
-    
     <View style={[styles.maincom, { backgroundColor: backgroundColor }]}>
       <TouchableOpacity
         style={styles.container}
         onPress={handlePress}
-        activeOpacity={0.8} 
+        activeOpacity={0.8}
         delayPressIn={100}
       >
         <View style={styles.Date}>
-          <Text style={styles.textmore}>Transaction 
-           {/* <Text style={{fontSize:8}}> {data.id} </Text>  */}
-            </Text>
+          <Text style={styles.textmore}>
+            Transaction
+            {/* <Text style={{fontSize:8}}> {data.id} </Text>  */}
+          </Text>
           <Text style={styles.ago}>{ago}</Text>
         </View>
         <View style={styles.main}>
-
           <View style={styles.user}>
             <View style={styles.shape}>
               <MaterialCommunityIcons
@@ -73,32 +95,34 @@ const TransactionElement: React.FC<TransactionElementProps> = ({
               />
             </View>
 
-            <View style={{ }}>
-            <Text
-              style={{ color: "#999" }}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {data.senderName.length > 25
-                ? `${data.senderName.substring(0, 25)}...`
-                : data.senderName || "Unknown"}
-            </Text>
-            <Text style={{ color: "#888",fontSize:12 }} numberOfLines={1} ellipsizeMode="tail">
-            {data.projectId || ""} 
-          </Text>
+            <View style={{}}>
+              <Text
+                style={{ color: "#999" }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {data.senderName.length > 25
+                  ? `${data.senderName.substring(0, 25)}...`
+                  : data.senderName || "Unknown"}
+              </Text>
+              <Text
+                style={{ color: "#888", fontSize: 12 }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {data.projectId || ""}
+              </Text>
             </View>
-            
           </View>
-            
+
           <View
             style={[
               styles.status,
               { backgroundColor: getStatusColor(data.status) },
             ]}
           >
-            <Text style={styles.state}>{data.status || ""}</Text>
+            <Text style={styles.state}>{Statustrim(data.status)}</Text>
           </View>
-
         </View>
       </TouchableOpacity>
     </View>

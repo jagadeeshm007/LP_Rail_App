@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet } from 'react-native';
 import { useData } from '@/src/providers/DataProvider';
 import { Stack, useRouter } from 'expo-router';
-import { TransactionData } from '@/assets/Types';
+import { TransactionData, status as Status } from '@/assets/Types';
 import TransactionElement from '../components/TransactionElement';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 
 // dummy data
 const filter1 = "project1";
@@ -21,7 +20,7 @@ const History = () => {
   useEffect(() => {
     setFilteredData(
       realTimeData.filter((item) =>
-        item.status === 'Pending'
+        item.status ===Status.inital
       )
     );
   }, [realTimeData, userProfile?.email]);

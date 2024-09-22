@@ -9,7 +9,7 @@ import { ActivityIndicator, View, StyleSheet } from "react-native";
 import Firestore from "@react-native-firebase/firestore";
 import { useAuth } from "./AuthProvider"; // Adjust the import path as needed
 import Messaging from "@react-native-firebase/messaging";
-import { roles } from "@/assets/Types";
+import { roles, status } from '@/assets/Types';
 import { UserProfile } from "@/assets/Types";
 import { useNotification } from "./NotificationContext";
 
@@ -94,7 +94,7 @@ export default function DataProvider({ children }: PropsWithChildren<{}>) {
           const currentArray: string[] = docData?.sessions || [];
   
           if (currentArray.includes(expoPushToken)) {
-            console.log("Value already exists in the array.");
+            //console.log("Value already exists in the array.");
             return;
           }
   
@@ -133,7 +133,7 @@ export default function DataProvider({ children }: PropsWithChildren<{}>) {
   const fetchDocument = async (collection: string, docId: string) => {
     try {
       const doc = await Firestore().collection(collection).doc(docId).get();
-      return doc.data();
+      return ({ id: doc.id, ...doc.data() });
     } catch (error) {
       console.error(
         `Error fetching document from ${collection}/${docId}:`,
@@ -174,7 +174,7 @@ export default function DataProvider({ children }: PropsWithChildren<{}>) {
     data: any
   ) => {
     try {
-      await Firestore().collection(collection).doc(Doc).set(data);
+      await Firestore().collection(collection).doc(Doc).update(data);
       console.log("Document written Successfully");
     } catch (error) {
       console.error(`Error posting document to ${collection}:`, error);
@@ -259,7 +259,7 @@ export default function DataProvider({ children }: PropsWithChildren<{}>) {
         unsubscribe = Firestore()
           .collection("transactions")
           .where("projectId", "==", userProfile.projectId)
-          .where("status", "in", ["Accepted", "Denied", "Processing"])
+          .where("status", "in", [status.phase1, status.phase2, status.phase3, status.phase4,status.final,status.fail,status.qualityfail,status.Suspend])
           .orderBy("timestamp", "desc")
           .onSnapshot(
             (snapshot) => {

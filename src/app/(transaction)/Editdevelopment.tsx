@@ -19,7 +19,7 @@ import { useData } from "../../providers/DataProvider";
 import firestore from "@react-native-firebase/firestore";
 import { Stack, useLocalSearchParams, router, useRouter } from "expo-router";
 import sendPushNotification from "@/src/lib/notifications";
-import { TransactionData, developmentData } from '@/assets/Types';
+import { TransactionData, developmentData,status } from '@/assets/Types';
 import { uploadImage } from "@/src/utils/uploadImage";
 import Transaction from "./index";
 type TransactionDataSnap = Omit<TransactionData, "id">;
@@ -223,7 +223,7 @@ const EditGeneral = () => {
       rejectedcause: "NULL",
       senderId: TransactionData?.senderId || "",
       senderName: TransactionData?.senderName || "",
-      status: "Pending",
+      status: status.inital,
       timestamp: TransactionData?.timestamp || firestore.Timestamp.now(),
       urilinks: successfulUploads,
       AccountantUri: TransactionData?.AccountantUri || [],
@@ -231,8 +231,9 @@ const EditGeneral = () => {
       development: TransactionData?.development || "",
       id: TransactionData?.id || "",
       Recipts: TransactionData?.Recipts || [],
-      AccountantId: TransactionData?.AccountantId ||  userProfile?.mappedAdminId || "",
+      AccountantId: TransactionData?.AccountantId ||  userProfile?.mappedAccountantId || "",
       permitteby: TransactionData?.permitteby || null,
+      PaymentMethods: TransactionData?.PaymentMethods || "",
     };
 
     try {

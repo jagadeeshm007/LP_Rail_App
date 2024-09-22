@@ -1,110 +1,51 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from 'react-native';
 import { TransactionData } from "@/assets/Types";
 import { formatTimestamp } from "@/src/utils/TimeFormat";
 import { getStatusColor } from "@/src/utils/TransactionStatus";
 import CopyClipBoard from "@/src/components/CopyClipBoard";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useData } from "../providers/DataProvider";
-
+import { status } from '../../assets/Types';
 interface PaymentSlipProps {
   transactionData: TransactionData;
-  status: string;
-  viewShotRef: React.RefObject<View>;
-  isMenuVisible: boolean;
-  setMenuVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  status  : string;
 }
 
-const PaymentSlip: React.FC<PaymentSlipProps> = ({
-  transactionData,
-  status,
-  viewShotRef,
-  isMenuVisible,
-  setMenuVisible,
-}) => {
-  const router = useRouter();
-  const [CanEdit, setCanEdit] = React.useState(false);
-  const { userProfile } = useData();
+const PaymentSlip: React.FC<PaymentSlipProps> = ({ transactionData , status}) => {
 
-  if (!transactionData) return null;
-
-  const handleEditRequest = () => {
-    const encodedData = encodeURIComponent(JSON.stringify(transactionData));
-    // console.log(transactionData.development," development ",transactionData.BankId,"BankId");
-    if (transactionData.BankId!==undefined && transactionData.BankId!==null && transactionData.BankId!=="") {
-      router.push(`/EditPayments?id=${encodedData}` as any);
-    } else if (transactionData.development !== undefined && transactionData.development !== null && transactionData.development !== "") {
-      router.push(`/Editdevelopment?id=${encodedData}` as any);
-    } else {
-      router.push(`/EditPage?id=${encodedData}` as any);
-    }
-  };
-
-  React.useEffect(() => {
-    if (
-      (transactionData.status === "Pending" ||
-        transactionData.status === "Denied") &&
-      transactionData.senderId === userProfile?.email
-    ) {
-      setCanEdit(true);
-    }
-  }, [transactionData]);
+  if(!transactionData) return null;
 
   return (
-    <View style={styles.Container} ref={viewShotRef}>
+    <View style={styles.Container}>
       <View style={styles.header}>
         <Text style={styles.senderName} numberOfLines={1} ellipsizeMode="tail">
-        {transactionData.senderName
-    ? transactionData.senderName.length > 12
-      ? `${transactionData.senderName.substring(0, 12)}...`
-      : transactionData.senderName
-    : "Unknown"}
+          {transactionData.senderName
+            ? transactionData.senderName.length > 12
+              ? `${transactionData.senderName.substring(0, 12)}...`
+              : transactionData.senderName
+            : "Unknown"}
         </Text>
         <Text style={styles.date}>
           {formatTimestamp(transactionData.timestamp)}
         </Text>
-
-        {/* Three-dot menu */}
-        {CanEdit && (
-          <TouchableOpacity
-            onPress={() => setMenuVisible(!isMenuVisible)}
-            style={styles.menuButton}
-          >
-            <Ionicons name="ellipsis-vertical" size={14} color="#fff" />
-          </TouchableOpacity>
-        )}
-
-        {/* Dropdown Menu */}
-        {isMenuVisible && (
-          <View style={styles.menu}>
-            <TouchableOpacity
-              onPress={() => {
-                handleEditRequest();
-                // Handle edit action here
-                setMenuVisible(false); // Collapse menu after click
-              }}
-              style={styles.menuItem}
-            >
-              <Text style={styles.menuText}>Edit</Text>
-            </TouchableOpacity>
-          </View>
-        )}
       </View>
 
       <Text style={styles.title}>
         Payment Status:{" "}
-        <Text style={{ color: getStatusColor(status) }}>{status}</Text>
+        <Text style={[{ color: getStatusColor(status) }]}>
+          {status}
+        </Text>
       </Text>
-      <Text style={styles.amount}>₹ {transactionData.amount || "--"}</Text>
+      
+      <Text style={styles.amount}>₹ {transactionData.amount}</Text>
       <Text style={{ fontWeight: "bold", color: "white" }}>
-        Project {transactionData.projectId || ""}
+        Project {transactionData.projectId}
       </Text>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={styles.transactionId}>
-          Transaction ID: {transactionData.id || "NULL"}
+          Transaction ID: {transactionData.id}
         </Text>
-        <CopyClipBoard text={transactionData.id || ""} />
+        <CopyClipBoard text={transactionData.id} />
       </View>
     </View>
   );
@@ -117,6 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#444",
     padding: 10,
     borderRadius: 10,
+    marginVertical: 10,
   },
   header: {
     flexDirection: "row",
@@ -133,7 +75,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
     color: "#E0E0E0",
@@ -171,5 +113,9 @@ const styles = StyleSheet.create({
   menuText: {
     color: "#fff",
     fontSize: 16,
+  },
+  Status: {
+    fontSize: 24,
+    fontWeight: "bold",
   },
 });

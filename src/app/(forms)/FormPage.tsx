@@ -18,7 +18,7 @@ import { useData } from "../../providers/DataProvider";
 import firestore from "@react-native-firebase/firestore";
 import { Stack } from "expo-router";
 import sendPushNotification from "@/src/lib/notifications";
-import { TransactionData,BankData } from "@/assets/Types";
+import { TransactionData,BankData,status } from "@/assets/Types";
 import { uploadImage } from "@/src/utils/uploadImage";
 type TransactionDataSnap = Omit<TransactionData, "id">;
 
@@ -154,14 +154,14 @@ const PaymentRequest = () => {
       rejectedcause: "NULL",
       senderId: userProfile?.email || "",
       senderName: userProfile?.name || "",
-      status: "Pending",
+      status: status.inital,
       timestamp: firestore.Timestamp.now(),
       urilinks: successfulUploads,
       AccountantUri: [],
       BankId: bankId as string || "",
       development: "",
       Recipts: [],
-      AccountantId: userProfile?.mappedAdminId || "",
+      AccountantId: userProfile?.mappedAccountantId || "",
       permitteby: null,
       PaymentMethods: "Site Expenditure",
     };

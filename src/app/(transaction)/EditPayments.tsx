@@ -19,7 +19,7 @@ import { useData } from "../../providers/DataProvider";
 import firestore from "@react-native-firebase/firestore";
 import { Stack,useLocalSearchParams, useRouter } from "expo-router";
 import sendPushNotification from "@/src/lib/notifications";
-import { TransactionData,BankData } from "@/assets/Types";
+import { TransactionData,BankData,status } from "@/assets/Types";
 import { uploadImage } from "@/src/utils/uploadImage";
 const EditPaymentRequest = () => {
 
@@ -218,7 +218,7 @@ const EditPaymentRequest = () => {
       rejectedcause: "NULL",
       senderId: transactionData?.senderId || "",
       senderName: transactionData?.senderName || "",
-      status: "Pending",
+      status: status.inital,
       timestamp: transactionData?.timestamp || firestore.Timestamp.now(),
       urilinks: successfulUploads,
       AccountantUri: [],
@@ -341,7 +341,7 @@ const EditPaymentRequest = () => {
         value={ponumber}
         onChangeText={setPonumber}
         style={[styles.input, errors.ponumber ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -350,7 +350,7 @@ const EditPaymentRequest = () => {
         value={vendorname}
         onChangeText={setVendorname}
         style={[styles.input, errors.vendorname ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -359,7 +359,7 @@ const EditPaymentRequest = () => {
         value={ifsc}
         onChangeText={setIfsc}
         style={[styles.input, errors.ifsc ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <TextInput
@@ -368,7 +368,7 @@ const EditPaymentRequest = () => {
         value={accountnumber}
         onChangeText={setAccountnumber}
         style={[styles.input, errors.accountnumber ? styles.inputError : null]}
-        keyboardType="numeric"
+        keyboardType="default"
       />
 
       <DropDownPicker
