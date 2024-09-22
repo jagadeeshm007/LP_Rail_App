@@ -48,7 +48,7 @@ const Transaction: React.FC = () => {
   const [status, setStatus] = useState<string>("");
   const [waiting, setWaiting] = useState(false);
   const [showDenyModal, setShowDenyModal] = useState(false);
-  const [Denystatus, setDenyStatus] = useState("");
+  const [Denystatus, setDenyStatus] = useState(Status.fail);
   const [refreshing, setRefreshing] = useState(false);
 
   const router = useRouter();
@@ -122,10 +122,11 @@ const Transaction: React.FC = () => {
     }
     const fetchdata = async () => {
       setLoading(true);
+      console.log("id", id);
       try {
-        const parsedData: TransactionData = JSON.parse(
-          decodeURIComponent(id.toString())
-        );
+        const decodedId = decodeURIComponent(id.toString());
+        const parsedData: TransactionData = JSON.parse(decodedId);
+        console.log("parsedData", parsedData);
         setTransactionData(parsedData);
         setStatus(parsedData.status);
         const fbankdata = await getData(parsedData.BankId, "BankDetails");
@@ -149,7 +150,7 @@ const Transaction: React.FC = () => {
 
   const handleDenypress = async (cause: string) => {
     setWaiting(true);
-    console.log("cause", cause);
+    // console.log("cause", Denystatus);
     try {
       await postDocumentwithDoc("transactions", transactionData.id, {
         status: Denystatus,
@@ -222,7 +223,7 @@ const Transaction: React.FC = () => {
         {
           text: "Yes",
           onPress: async () => {
-            // setWaiting(true);
+            setWaiting(true);
             if (newstatus === status) {
               Notify({
                 transactionData: transactionData,
