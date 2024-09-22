@@ -48,7 +48,7 @@ const Transaction: React.FC = () => {
   const [status, setStatus] = useState<string>("");
   const [waiting, setWaiting] = useState(false);
   const [showDenyModal, setShowDenyModal] = useState(false);
-  const [setDenystatus, setDenyStatus] = useState("");
+  const [Denystatus, setDenyStatus] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
   const router = useRouter();
@@ -152,14 +152,14 @@ const Transaction: React.FC = () => {
     console.log("cause", cause);
     try {
       await postDocumentwithDoc("transactions", transactionData.id, {
-        status: setDenystatus,
+        status: Denystatus,
         rejectedcause: cause,
         permitteby: {
           id: userProfile?.email,
           name: userProfile?.name,
         },
       });
-      transactionData.rejectedcause = setDenystatus;
+      transactionData.rejectedcause = Denystatus;
       Notify({
         transactionData: transactionData,
         statement: "Transaction Rejected",
@@ -167,6 +167,7 @@ const Transaction: React.FC = () => {
         fetchDocument: fetchDocument,
       });
       setStatus(Status.fail);
+    setWaiting(false);
     } catch (e) {
       console.log("error updating status", e);
     }
@@ -192,7 +193,7 @@ const Transaction: React.FC = () => {
       setWaiting(false);
       return;
     } else if (newstatus === Status.phase4) {
-      // setWaiting(true);
+      setWaiting(true);
       await postDocumentwithDoc("transactions", transactionData.id, {
         status: newstatus,
       });
@@ -361,7 +362,7 @@ const Transaction: React.FC = () => {
       />
       {showDenyModal && (
         <DenyModal
-          status={setDenystatus}
+          status={Denystatus}
           handleDenypress={(cause: string) => handleDenypress(cause)}
           handleDismiss={(dismiss: boolean) => setShowDenyModal(dismiss)}
         />
